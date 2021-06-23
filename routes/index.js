@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 });
 
 /*Authentication*/
-router.post('/auth/login', body('email').isEmail(), body('password').isLength({ min: 8 }), authentication);
+router.post('/auth/login', body('email').isEmail(), body('password').isLength({ min: 8 }), Login);
 
 
 module.exports = router;
