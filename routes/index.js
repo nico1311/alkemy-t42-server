@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var { body } = require('express-validator');
 
-const {authentication} = require('./../controllers/auth-controller');
+const {Login} = require('./../controllers/auth-controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
