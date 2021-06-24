@@ -3,8 +3,8 @@
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
+require('dotenv').config();
+var { app, setup } = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 
@@ -21,11 +21,7 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
 
-server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
@@ -88,3 +84,16 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+const boot = async () => {
+  try {
+    await setup();
+    // Listen on provided port, on all network interfaces.
+    server.listen(port);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+}
+
+boot();
