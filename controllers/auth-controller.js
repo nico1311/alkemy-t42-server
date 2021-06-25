@@ -1,5 +1,5 @@
 const { User } = require("./../models/index");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 
 module.exports = {
@@ -14,10 +14,12 @@ module.exports = {
 
     const user = await User.findOne({ where: { email: email } });
 
+    const passwordID = bcrypt.hashSync(user.password, 10);
+
     if (!user) {
         res.status(404).json({ ok: false });
     } else {
-      if (bcrypt.compareSync(password, user.password)) {
+      if (bcrypt.compareSync(password, passwordID)) {
         res.status(200).json({ user: user });
       } else {
         res.status(400).json({ ok: false });
