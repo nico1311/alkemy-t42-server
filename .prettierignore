@@ -1,0 +1,14 @@
+# dependencies
+/node_modules
+/.vscode
+# testing
+/coverage
+# files
+.vscode
+.env
+package-lock.json
+# database
+/migrations
+# miscelaneus
+/public
+/views
