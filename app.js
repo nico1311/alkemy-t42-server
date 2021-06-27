@@ -12,7 +12,7 @@ const authRouter = require('./routes/auth');
 const db = require('./models');
 
 const app = express();
-app.use(cors())
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,12 +29,12 @@ app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -46,6 +46,6 @@ app.use(function(err, req, res, next) {
 
 const setup = async () => {
   await db.sequelize.authenticate();
-}
+};
 
 module.exports = { app, setup };
