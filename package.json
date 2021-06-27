@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
-    "prettier": "prettier --write .{js,jsx,css} && prettier --check .{js,jsx,css}"
+    "prettier": "prettier --write **/*.{js,ts} && prettier --check **/*.{js,ts}"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
