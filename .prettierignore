@@ -7,8 +7,6 @@
 .vscode
 .env
 package-lock.json
-# database
-/migrations
 # miscelaneus
 /public
 /views
