@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "nodemon ./bin/www",
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "prettier": "prettier --write **/*.{js,ts} && prettier --check **/*.{js,ts}"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.7",
+    "prettier": "2.3.2",
     "sequelize-cli": "^6.2.0"
   }
 }
