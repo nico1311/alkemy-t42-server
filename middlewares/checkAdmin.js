@@ -12,9 +12,8 @@ const checkAdmin = async(req, res, next) => {
         return res.status(403).json({ Error: "Admin role required" });
     }
 
-  } catch(error) {
-    console.log(error);
-    return res.status(500).send({ Error: error });
+  } catch {
+    return res.status(500).send("Error");
   }
 
 }
