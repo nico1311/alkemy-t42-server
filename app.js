@@ -12,6 +12,8 @@ const authRouter = require('./routes/auth');
 
 const db = require('./models');
 
+const testimonialsRouter = require('./routes/testimonials')
+
 const app = express();
 app.use(cors())
 
@@ -29,6 +31,8 @@ app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
 app.use('/api/auth', authRouter);
+
+app.use('/api/testimonials', testimonialsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
