@@ -1,8 +1,8 @@
-var express = require('express');
-var router = express.Router();
-var verifyToken = require('../middlewares/verifyToken');
-var checkAdmin = require('./../middlewares/checkAdmin');
-var {getContacts} = require('./../controllers/contacts');
+const express = require('express');
+const router = express.Router();
+const verifyToken = require('../middlewares/verifyToken');
+const checkAdmin = require('./../middlewares/checkAdmin');
+const {getContacts} = require('./../controllers/contacts');
 
 router.get('/', [verifyToken, checkAdmin], getContacts);
 

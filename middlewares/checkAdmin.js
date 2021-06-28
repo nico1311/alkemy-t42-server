@@ -5,7 +5,7 @@ const checkAdmin = async(req, res, next) => {
   try {
     const user = await User.findOne({where: {id: req.decodedID}});
 
-   if(user.roleId == 1)
+   if(user.roleId === 1)
     {
         next();
     } else{
