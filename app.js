@@ -7,12 +7,15 @@ const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const contactsRouter = require('./routes/contacts');
 const authRouter = require('./routes/auth');
 
 const db = require('./models');
 
+const testimonialsRouter = require('./routes/testimonials')
+
 const app = express();
-app.use(cors())
+app.use(cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,17 +27,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/auth', authRouter);
+app.use('/api', indexRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/contacts', contactsRouter);
+app.use('/api/auth', authRouter);
+
+app.use('/api/testimonials', testimonialsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -46,6 +52,6 @@ app.use(function(err, req, res, next) {
 
 const setup = async () => {
   await db.sequelize.authenticate();
-}
+};
 
 module.exports = { app, setup };
