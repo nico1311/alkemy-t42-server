@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      "Entries",
+      'Entries',
       [
         {
-          name: "Demo",
-          content: "Demo",
+          name: 'Demo',
+          content: 'Demo',
           image:
-            "https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png",
+            'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
           categoryId: 1,
-          type: "Event",
+          type: 'Event',
           deletedAt: null,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
       ],
-      {}
+      {},
     );
   },
 
