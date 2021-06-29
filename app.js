@@ -13,7 +13,7 @@ const publicDataRouter = require('./routes/publicData');
 
 const db = require('./models');
 
-const testimonialsRouter = require('./routes/testimonials')
+const testimonialsRouter = require('./routes/testimonials');
 
 const app = express();
 app.use(cors());
