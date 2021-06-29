@@ -3,6 +3,15 @@ const bcrypt = require("bcrypt");
 const { validationResult } = require("express-validator");
 
 module.exports = {
+  /** The function receives an user and a password from req.body. If user is valid, returns a json with the user. Otherwise,
+   * returns {ok: false}
+   * 
+   * Uses bcrypt to compare password provided by user with the crypted password in database.
+   * 
+   * @function Login
+   * @param  {} req Should receive an email and a password
+   * @param  {} res
+   */
   async Login(req, res) {
 
     const errors = validationResult(req);
