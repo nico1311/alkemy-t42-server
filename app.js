@@ -9,6 +9,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const contactsRouter = require('./routes/contacts');
 const authRouter = require('./routes/auth');
+const publicDataRouter = require('./routes/publicData');
 
 const db = require('./models');
 
@@ -31,6 +32,7 @@ app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
 app.use('/api/auth', authRouter);
+app.use('/organizations/1/public', publicDataRouter);
 
 app.use('/api/testimonials', testimonialsRouter);
 
