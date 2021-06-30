@@ -1,5 +1,4 @@
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 /**
  * This function is a wrapper to send mail with a provider of that service.
  * @function sendMail
@@ -27,15 +26,60 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
  *   text: 'and easy to do anywhere, even with Node.js',
  *   html: '<strong>and easy to do anywhere, even with Node.js</strong>'
  * });
+ * @example
+ * // Example with express.
+ * router.post('/api/mail', async (req, res) => {
+ * const { to, subject, text, html } = req.body;
+ *
+ * const msg = {
+ *   to,
+ *   from: 'YourVerifySenderIdentity@gmail.com',
+ *   subject,
+ *   text,
+ *   html,
+ * };
+ *
+ * try {
+ *   await sendMail(msg);
+ * } catch (err) {
+ *   return res.status(err.code).send(err.message);
+ * }
+ *
+ * res.status(201).send({ success: true });
+ * });
  */
-const sendMail = async ({ to, from, subject, text, html }) => {
-  try {
-    await sgMail.send({ to, from, subject, text, html });
-  } catch (error) {
-    console.error(error);
-    if (error.response) {
-      console.error(error.response.body);
+const sendMail = async ({
+  to,
+  from,
+  subject,
+  text,
+  html,
+  sandboxMode = false
+}) => {
+  // First conditional to test, set an API KEY on .env file.
+  if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    try {
+      await sgMail.send({
+        to,
+        from,
+        subject,
+        text,
+        html,
+        mail_settings: {
+          sandbox_mode: {
+            enable: sandboxMode // Setting sandbox to tests.
+          }
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      if (error.response) {
+        console.error(error.response.body);
+      }
     }
+  } else {
+    console.log('Error: Mail Service "SendGrid", do not have an API KEY.');
   }
 };
 
