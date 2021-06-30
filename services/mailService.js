@@ -79,7 +79,9 @@ const sendMail = async ({
       }
     }
   } else {
-    console.log('Error: Mail Service "SendGrid", do not have an API KEY.');
+    console.log(
+      'Error: Mail Service "SendGrid", in .env do not have an API KEY.'
+    );
   }
 };
 
