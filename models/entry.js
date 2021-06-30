@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.STRING,
       categoryId: DataTypes.INTEGER,
       type: DataTypes.STRING,
-      deletedAt: DataTypes.DATE
+      deletedAt: DataTypes.DATE,
+      createdAt: DataTypes.DATE
     },
     {
       sequelize,
