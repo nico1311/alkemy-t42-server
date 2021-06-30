@@ -17,17 +17,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER
       },
       name: DataTypes.STRING,
       phone: DataTypes.STRING,
       email: DataTypes.STRING,
-      deleteAt: DataTypes.DATEONLY,
+      deleteAt: DataTypes.DATEONLY
     },
     {
       sequelize,
-      modelName: 'Contact',
-    },
+      modelName: 'Contact'
+    }
   );
   return Contact;
 };

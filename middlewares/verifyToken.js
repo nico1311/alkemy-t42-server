@@ -1,23 +1,27 @@
-const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
-const config = require(__dirname + '/../config/config').development;
+const TokenService = require('../services/TokenService');
 
+/**
+ * Middleware to verify the token sent in the Authorization header.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 const verifyToken = async (req, res, next) => {
   const token = req.headers['authorization'];
 
-  if (!token) return res.status(403).json({ Error: 'No token provided' });
+  if (!token) return res.status(400).json({ error: 'No token provided' });
 
   try {
-    const jwtDecode = jwt.verify(token, config.secret);
-    req.decodedID = jwtDecode.id;
+    const decodedJWT = TokenService.decodeToken(token);
 
-    const user = await User.findOne({ where: { id: req.decodedID } });
+    const user = await User.findOne({ where: { id: decodedJWT.userId } });
+    if (!user) return res.status(401).json({ error: 'Invalid user' });
 
-    if (!user) return res.status(404).json({ Error: 'User not found' });
-
+    req.user = user;
     next();
   } catch {
-    res.status(500).json({ Error: 'Unauthorized' });
+    res.status(401).json({ error: 'Unauthorized' });
   }
 };
 

@@ -3,21 +3,17 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.bulkInsert(
-      'Entries',
+      'Categories',
       [
         {
-          name: 'Demo',
-          content: 'Demo',
-          image:
-            'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
-          categoryId: 1,
-          type: 'Event',
+          name: 'Example',
+          description: 'A category created for demo purposes',
           deletedAt: null,
           createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+          updatedAt: new Date()
+        }
       ],
-      {},
+      {}
     );
   },
 
@@ -28,5 +24,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  },
+  }
 };

@@ -16,12 +16,12 @@ module.exports = (sequelize, DataTypes) => {
       imageUrl: DataTypes.STRING,
       text: DataTypes.TEXT,
       order: DataTypes.INTEGER,
-      organizationId: DataTypes.INTEGER,
+      organizationId: DataTypes.INTEGER
     },
     {
       sequelize,
-      modelName: 'Slide',
-    },
+      modelName: 'Slide'
+    }
   );
   return Slide;
 };
