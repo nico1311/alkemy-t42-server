@@ -21,7 +21,7 @@ const sgMail = require('@sendgrid/mail');
  *
  * sendMail({
  *   to: 'Some One <someone@example.org>', //Email address with name
- *   from: 'test@example.com', // Use the email address or domain you verified above
+ *   from: 'test@example.com', // You have a default setted by .env
  *   subject: 'Sending with Twilio SendGrid is Fun',
  *   text: 'and easy to do anywhere, even with Node.js',
  *   html: '<strong>and easy to do anywhere, even with Node.js</strong>'
@@ -51,36 +51,34 @@ const sgMail = require('@sendgrid/mail');
 const sendMail = async ({
   to,
   from,
-  subject,
   text,
   html,
-  sandboxMode = false
+  sandboxMode = false,
+  ...rest
 }) => {
   // First conditional to test, set an API KEY on .env file.
-  if (process.env.SENDGRID_API_KEY) {
+  if (process.env.SENDGRID_API_KEY && process.env.SENDGRID_VERIFY_SENDER) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     try {
-      await sgMail.send({
+      return await sgMail.send({
         to,
         from,
-        subject,
+        subject: process.env.SENDGRID_VERIFY_SENDER,
         text,
         html,
         mail_settings: {
           sandbox_mode: {
             enable: sandboxMode // Setting sandbox to tests.
           }
-        }
+        },
+        ...rest
       });
     } catch (error) {
-      console.error(error);
-      if (error.response) {
-        console.error(error.response.body);
-      }
+      return error;
     }
   } else {
     console.log(
-      'Error: Mail Service "SendGrid", in .env do not have an API KEY.'
+      'Error: Mail Service "SendGrid", in .env do not have an API KEY and/or VERIFY SENDER.'
     );
   }
 };
