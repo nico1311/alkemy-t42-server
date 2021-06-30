@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
+const TokenService = require('../services/TokenService');
 
 module.exports = {
   /**
@@ -27,7 +28,14 @@ module.exports = {
         // copy of user.dataValues without password property
         const { password, ...sentValues } = user.dataValues;
 
-        res.status(200).json({ user: sentValues });
+        const token = TokenService.createToken({
+          userId: user.id
+        });
+
+        res.status(200).json({
+          token,
+          user: sentValues
+        });
       } else {
         res.status(401).json({ ok: false });
       }
@@ -63,6 +71,7 @@ module.exports = {
         lastName: req.body.last_name,
         email: req.body.email,
         password: hashedPassword,
+        roleId: 2
       });
 
       // copy of user.dataValues without password property
