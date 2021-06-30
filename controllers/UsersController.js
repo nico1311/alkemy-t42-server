@@ -9,10 +9,10 @@ module.exports = {
    */
   async getAllUsers(req, res) {
     try {
-      const results = await User.findAll();
-      const users = results.map((user) => {
-        const { password, ...filteredValues } = user.dataValues;
-        return filteredValues;
+      const users = await User.findAll({
+        attributes: {
+          exclude: ['password']
+        }
       });
       res.json({ users });
     } catch (err) {
