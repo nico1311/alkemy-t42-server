@@ -1,8 +1,8 @@
 /**
  * Middleware to check user permissions. Intended to be used when token is already verified.
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
- * @param {import('express').NextFunction} next 
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
  */
 const checkAdmin = async (req, res, next) => {
   try {

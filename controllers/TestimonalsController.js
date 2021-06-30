@@ -7,7 +7,7 @@ module.exports = {
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
-  async createTestimonial (req, res) {
+  async createTestimonial(req, res) {
     try {
       const response = await Testimonials.create(req.body);
       res.json(response);
@@ -15,4 +15,4 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   }
-}
+};

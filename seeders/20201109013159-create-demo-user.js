@@ -15,10 +15,10 @@ module.exports = {
           image:
             'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
           createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+          updatedAt: new Date()
+        }
       ],
-      {},
+      {}
     );
   },
 
@@ -29,5 +29,5 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-  },
+  }
 };

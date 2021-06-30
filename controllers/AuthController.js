@@ -21,7 +21,7 @@ module.exports = {
       const { email, password } = values;
 
       const user = await User.findOne({ where: { email: email } });
-  
+
       if (!user) {
         res.status(404).json({ ok: false });
       } else {
@@ -29,11 +29,11 @@ module.exports = {
         if (passwordsMatch) {
           // copy of user.dataValues without password property
           const { password, ...sentValues } = user.dataValues;
-  
+
           const token = TokenService.createToken({
             userId: user.id
           });
-  
+
           res.status(200).json({
             token,
             user: sentValues
@@ -43,7 +43,8 @@ module.exports = {
         }
       }
     } catch (err) {
-      if (err.details) { // body validation error
+      if (err.details) {
+        // body validation error
         res.status(422).json({ errors: err.details });
       } else {
         res.status(500).json({ error: err.message });
@@ -70,12 +71,12 @@ module.exports = {
 
       const existingUser = await User.findOne({
         where: {
-          email: req.body.email,
-        },
+          email: req.body.email
+        }
       });
       if (existingUser) {
         return res.status(400).json({
-          error: 'Email already registered',
+          error: 'Email already registered'
         });
       }
 
@@ -92,13 +93,13 @@ module.exports = {
       const { password, ...sentValues } = user.dataValues;
 
       res.status(201).json({ user: sentValues });
-
     } catch (err) {
-      if (err.details) { // body validation error
+      if (err.details) {
+        // body validation error
         res.status(422).json({ errors: err.details });
       } else {
         res.status(500).json({ error: err.message });
       }
     }
-  },
+  }
 };

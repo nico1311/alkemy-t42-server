@@ -17,8 +17,8 @@ router.get('/', (req, res) => {
       //Value = Profile Link
       socialLinks: {
         Instagram: 'https://www.instagram.com/SomosMás',
-        Facebook: 'https://www.facebook.com/Somos_Más',
-      },
+        Facebook: 'https://www.facebook.com/Somos_Más'
+      }
     };
     res.status(200).json(publicData);
   } catch (error) {

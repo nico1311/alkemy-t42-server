@@ -3,9 +3,9 @@ const TokenService = require('../services/TokenService');
 
 /**
  * Middleware to verify the token sent in the Authorization header.
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
- * @param {import('express').NextFunction} next 
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
  */
 const verifyToken = async (req, res, next) => {
   const token = req.headers['authorization'];

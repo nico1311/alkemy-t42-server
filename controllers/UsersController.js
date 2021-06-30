@@ -7,7 +7,7 @@ module.exports = {
    * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
-  async getAllUsers (req, res) {
+  async getAllUsers(req, res) {
     try {
       const results = await User.findAll();
       const users = results.map((user) => {
@@ -19,4 +19,4 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   }
-}
+};
