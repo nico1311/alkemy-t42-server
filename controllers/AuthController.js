@@ -7,7 +7,7 @@ module.exports = {
   /**
    * Log in a user with email and password
    * @param {import('express').Request} req
-   * @param {import('express').Rsponse} res
+   * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
   async login(req, res) {
@@ -45,7 +45,7 @@ module.exports = {
   /**
    * Register a new user account
    * @param {import('express').Request} req
-   * @param {import('express').Rsponse} res
+   * @param {import('express').Response} res
    * @returns {Promise<void>}
    */
   async register(req, res) {
