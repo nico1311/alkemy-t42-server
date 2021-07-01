@@ -18,5 +18,17 @@ module.exports = {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+  },
+  async deleteUser(req, res) {
+    try {
+      const response = await User.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      res.sendStatus(200);
+    } catch (err) {
+      res.status(500).json({ error: err.message })
+    }
   }
 };
