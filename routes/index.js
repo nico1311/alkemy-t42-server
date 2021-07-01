@@ -7,6 +7,6 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.use('/news', entriesRouter)
+router.use('/', entriesRouter)
 
 module.exports = router;
