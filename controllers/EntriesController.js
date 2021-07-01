@@ -14,9 +14,7 @@ module.exports = {
     try {
       const news = await Entry.findAll({
         where: { type: 'news' },
-        attributes: {
-          exclude: ['content', 'categoryId', 'type', 'deletedAt', 'updatedAt', 'id']
-        }
+        attributes: ['name', 'image', 'createdAt', 'id']
       });
       res.json({ news });
     } catch (error) {
