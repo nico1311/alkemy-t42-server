@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  member.init({
+  Member.init({
     name: DataTypes.STRING,
     image: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Member',
   });
-  return member;
+  return Member;
 };
