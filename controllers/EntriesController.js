@@ -30,7 +30,7 @@ module.exports = {
   async getNewsDetail(req, res) {
     try {
       const newsDetail = await Entry.findByPk(req.params.id);
-      newsDetail === null ? res.status(204).end() : res.json({ newsDetail });
+      newsDetail === null ? res.status(404).end() : res.json({ newsDetail });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
