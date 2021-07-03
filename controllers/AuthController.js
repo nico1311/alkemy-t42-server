@@ -101,5 +101,17 @@ module.exports = {
         res.status(500).json({ error: err.message });
       }
     }
+  },
+
+  /**
+   * Get details about the currently logged in user
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  async getCurrentUserInfo(req, res) {
+    const { user } = req;
+    const { password, ...sentValues } = user.dataValues; // exclude password
+    res.status(200).json(sentValues);
   }
 };

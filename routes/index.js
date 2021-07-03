@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const entriesRouter = require('./entries')
 
 const authRouter = require('./auth');
 const contactsRouter = require('./contacts');
@@ -12,5 +13,6 @@ router.use('/contacts', contactsRouter);
 router.use('/organizations/1/public', publicDataRouter);
 router.use('/testimonials', testimonialsRouter);
 router.use('/users', usersRouter);
+router.use('/news', entriesRouter)
 
 module.exports = router;
