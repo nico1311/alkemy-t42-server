@@ -43,7 +43,7 @@ module.exports = {
     });
   },
 
-    /**This function get a file from AWS S3
+  /**This function get a file from AWS S3
    * @function postFile
    * @param {import('express').Request} req
    * @param {import('express').Response} res
@@ -65,7 +65,7 @@ module.exports = {
     });
   },
 
-   /**This function deletes a file from AWS S3
+  /**This function deletes a file from AWS S3
    * @function postFile
    * @param {import('express').Request} req
    * @param {import('express').Response} res
