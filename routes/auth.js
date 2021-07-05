@@ -1,23 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { body } = require('express-validator');
+const verifyToken = require('../middlewares/verifyToken');
+const AuthController = require('../controllers/AuthController');
 
-const AuthController = require('../controllers/auth-controller');
-
-router.post(
-  '/login',
-  body('email').isEmail(),
-  body('password').isLength({ min: 8 }),
-  AuthController.login,
-);
-
-router.post(
-  '/register',
-  body('first_name').isLength({ min: 1 }),
-  body('last_name').isLength({ min: 1 }),
-  body('email').isEmail(),
-  body('password').isLength({ min: 8 }),
-  AuthController.register,
-);
+router.post('/login', AuthController.login);
+router.post('/register', AuthController.register);
+router.get('/me', [verifyToken], AuthController.getCurrentUserInfo);
 
 module.exports = router;

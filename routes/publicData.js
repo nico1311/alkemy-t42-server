@@ -15,10 +15,16 @@ router.get('/', (req, res) => {
       //Social links is object with social links in the footer.
       //Key = Name of social network
       //Value = Profile Link
-      socialLinks: {
-        Instagram: 'https://www.instagram.com/SomosMás',
-        Facebook: 'https://www.facebook.com/Somos_Más',
-      },
+      socialLinks: [
+        {
+          socialMediaName: 'Instagram',
+          link: 'https://www.instagram.com/SomosMás'
+        },
+        {
+          socialMediaName: 'Facebook',
+          link: 'https://www.facebook.com/Somos_Más'
+        }
+      ]
     };
     res.status(200).json(publicData);
   } catch (error) {

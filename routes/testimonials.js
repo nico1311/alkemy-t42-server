@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { PostTestimonials } = require('./../controllers/testimonials');
+const { createTestimonial } = require('../controllers/TestimonalsController');
 const { validateCreate } = require('./../middlewares/testimonials');
 
-router.post('/', validateCreate, PostTestimonials);
+router.post('/', validateCreate, createTestimonial);
 
 module.exports = router;
