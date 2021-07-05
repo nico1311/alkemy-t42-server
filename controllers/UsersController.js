@@ -26,7 +26,8 @@ module.exports = {
           id: req.params.id,
         },
       });
-      res.sendStatus(200);
+      if (response == 1) res.sendStatus(204)
+      else res.sendStatus(404)
     } catch (err) {
       res.status(500).json({ error: err.message })
     }
