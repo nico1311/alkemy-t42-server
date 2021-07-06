@@ -2,6 +2,8 @@ const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
 const TokenService = require('../services/TokenService');
+const log = require('../utils/logger')
+const { createToken } = require('../services/TokenService')
 
 module.exports = {
   /**
@@ -68,6 +70,7 @@ module.exports = {
 
     try {
       const values = await registrationSchema.validateAsync(req.body);
+      log.info(`Registering user with email: [${req.body.email}]`)
 
       const existingUser = await User.findOne({
         where: {
@@ -75,6 +78,7 @@ module.exports = {
         }
       });
       if (existingUser) {
+        log.warn(`Email [${req.body.email}] already registered`)
         return res.status(400).json({
           error: 'Email already registered'
         });
@@ -88,14 +92,17 @@ module.exports = {
         password: hashedPassword,
         roleId: 2
       });
-
       // copy of user.dataValues without password property
       const { password, ...sentValues } = user.dataValues;
+      // create token
+      const token = createToken({userId: sentValues.id})
 
-      res.status(201).json({ user: sentValues });
+      log.info(`User [${sentValues.firstName}] was registered and login`)
+      res.status(201).json({ user: sentValues, token });
     } catch (err) {
       if (err.details) {
         // body validation error
+        log.error(`Body validation error. [${err.details}]`)
         res.status(422).json({ errors: err.details });
       } else {
         res.status(500).json({ error: err.message });
