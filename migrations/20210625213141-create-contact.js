@@ -20,6 +20,9 @@ module.exports = {
       email: {
         type: Sequelize.STRING
       },
+      message: {
+        type: Sequelize.STRING(2048)
+      },
       deleteAt: {
         type: Sequelize.DATEONLY
       },
