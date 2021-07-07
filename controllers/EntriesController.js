@@ -36,6 +36,11 @@ module.exports = {
     }
   },
 
+  /** Update an entry
+   * @function putNew
+   * @param {import('express').Request} req
+   * @param {import('express').Response } res
+   */
   async putNew (req, res) {
     try{
       const entry = await Entry.findByPk(req.params.id);
