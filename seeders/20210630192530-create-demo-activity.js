@@ -10,7 +10,8 @@ module.exports = {
           image:
             'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
           content: 'Hola',
-          createdAt: new Date()
+          createdAt: new Date(),
+          updatedAt: new Date()
         }
       ],
       {}
