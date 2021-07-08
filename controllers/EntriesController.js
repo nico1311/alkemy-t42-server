@@ -36,6 +36,15 @@ module.exports = {
     }
   },
 
+  async postNew(req, res) {
+    try{
+      const newPost = await Entry.create(req.body)
+      res.json(newPost);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  },
+
   /** Update an entry
    * @function putNew
    * @param {import('express').Request} req
