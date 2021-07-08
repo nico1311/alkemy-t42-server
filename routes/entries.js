@@ -6,8 +6,8 @@ const { getNews, getNewsDetail, putNew, deleteNew } = require('../controllers/En
 
 router.get('/', verifyToken, getNews);
 router.get('/:id', verifyToken, getNewsDetail);
-router.put('/:id', verifyToken, checkAdmin, putNew);
-router.delete('/:id', verifyToken, checkAdmin, deleteNew );
+router.put('/:id', [verifyToken, checkAdmin], putNew);
+router.delete('/:id', [verifyToken, checkAdmin], deleteNew );
 
 
 module.exports = router;
