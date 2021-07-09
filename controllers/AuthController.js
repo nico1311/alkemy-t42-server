@@ -2,8 +2,9 @@ const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
 const TokenService = require('../services/TokenService');
-const log = require('../utils/logger')
-const { createToken } = require('../services/TokenService')
+const log = require('../utils/logger');
+const { createToken } = require('../services/TokenService');
+const sendMail = require('../services/mailService');
 
 module.exports = {
   /**
@@ -70,7 +71,6 @@ module.exports = {
 
     try {
       const values = await registrationSchema.validateAsync(req.body);
-      log.info(`Registering user with email: [${req.body.email}]`)
 
       const existingUser = await User.findOne({
         where: {
@@ -78,7 +78,6 @@ module.exports = {
         }
       });
       if (existingUser) {
-        log.warn(`Email [${req.body.email}] already registered`)
         return res.status(400).json({
           error: 'Email already registered'
         });
@@ -92,17 +91,23 @@ module.exports = {
         password: hashedPassword,
         roleId: 2
       });
+
       // copy of user.dataValues without password property
       const { password, ...sentValues } = user.dataValues;
-      // create token
-      const token = createToken({userId: sentValues.id})
 
-      log.info(`User [${sentValues.firstName}] was registered and login`)
-      res.status(201).json({ user: sentValues, token });
+      const msg = {
+        to: 'elmastilmkt@gmail.com',
+        from: process.env.SENDGRID_VERIFY_SENDER, // Use the email address or domain you verified above
+        subject: 'Sending with Twilio SendGrid is Fun',
+        text: 'and easy to do anywhere, even with Node.js',
+        html: '<strong>and easy to do anywhere, even with Node.js</strong>'
+      };
+      await sendMail(msg);
+
+      res.status(201).json({ user: sentValues });
     } catch (err) {
       if (err.details) {
         // body validation error
-        log.error(`Body validation error. [${err.details}]`)
         res.status(422).json({ errors: err.details });
       } else {
         res.status(500).json({ error: err.message });
