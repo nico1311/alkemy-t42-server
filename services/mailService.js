@@ -62,8 +62,8 @@ const sendMail = async ({
     try {
       return await sgMail.send({
         to,
-        from,
-        subject: process.env.SENDGRID_VERIFY_SENDER,
+        from: process.env.SENDGRID_VERIFY_SENDER,
+        subject,
         text,
         html,
         mail_settings: {
