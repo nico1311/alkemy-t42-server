@@ -18,5 +18,18 @@ module.exports = {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
+  },
+  async deleteUser(req, res) {
+    try {
+      const response = await User.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      if (response == 1) res.sendStatus(204)
+      else res.sendStatus(404)
+    } catch (err) {
+      res.status(500).json({ error: err.message })
+    }
   }
 };
