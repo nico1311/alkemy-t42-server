@@ -2,8 +2,9 @@ const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
 const TokenService = require('../services/TokenService');
-const log = require('../utils/logger')
-const { createToken } = require('../services/TokenService')
+const log = require('../utils/logger');
+const { createToken } = require('../services/TokenService');
+const sendMail = require('../services/mailService');
 
 module.exports = {
   /**
@@ -70,7 +71,7 @@ module.exports = {
 
     try {
       const values = await registrationSchema.validateAsync(req.body);
-      log.info(`Registering user with email: [${req.body.email}]`)
+      log.info(`Registering user with email: [${req.body.email}]`);
 
       const existingUser = await User.findOne({
         where: {
@@ -78,7 +79,7 @@ module.exports = {
         }
       });
       if (existingUser) {
-        log.warn(`Email [${req.body.email}] already registered`)
+        log.warn(`Email [${req.body.email}] already registered`);
         return res.status(400).json({
           error: 'Email already registered'
         });
@@ -94,15 +95,23 @@ module.exports = {
       });
       // copy of user.dataValues without password property
       const { password, ...sentValues } = user.dataValues;
+      // Send Mail Message
+      const msg = {
+        to: req.body.email,
+        subject: 'Tu cuenta ha sido creada con exito.',
+        text: 'Texto de ejemplo, la cuenta ha sido creada con exito.',
+        html: '<h1>Bienvenido a Somos Más</h1><hr/><strong>Muchas gracias por registrarse como usuario. Ya puede iniciar sesión, cuando usted desee.</strong>'
+      };
+      await sendMail(msg);
       // create token
-      const token = createToken({userId: sentValues.id})
+      const token = createToken({ userId: sentValues.id });
 
-      log.info(`User [${sentValues.firstName}] was registered and login`)
+      log.info(`User [${sentValues.firstName}] was registered and login`);
       res.status(201).json({ user: sentValues, token });
     } catch (err) {
       if (err.details) {
         // body validation error
-        log.error(`Body validation error. [${err.details}]`)
+        log.error(`Body validation error. [${err.details}]`);
         res.status(422).json({ errors: err.details });
       } else {
         res.status(500).json({ error: err.message });
