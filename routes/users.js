@@ -6,6 +6,6 @@ const { getAllUsers, deleteUser } = require('../controllers/UsersController');
 
 /* GET users listing. */
 router.get('/', [verifyToken, checkAdmin], getAllUsers);
-router.delete('/:id', deleteUser)
+router.delete('/:id', [verifyToken, checkAdmin], deleteUser)
 
 module.exports = router;
