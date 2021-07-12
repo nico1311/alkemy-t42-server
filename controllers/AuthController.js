@@ -23,9 +23,11 @@ module.exports = {
       const values = await loginSchema.validateAsync(req.body);
       const { email, password } = values;
 
+      log.info(`User [${email}] is trying to login`);
       const user = await User.findOne({ where: { email: email } });
 
       if (!user) {
+        log.warn(`User ${email} does not exist`);
         res.status(404).json({ ok: false });
       } else {
         const passwordsMatch = await bcrypt.compare(password, user.password);
@@ -37,19 +39,23 @@ module.exports = {
             userId: user.id
           });
 
+          log.info(`User [${email}] login was successful`);
           res.status(200).json({
             token,
             user: sentValues
           });
         } else {
+          log.warn(`User [${email}] provided wrong credentials`);
           res.status(401).json({ ok: false });
         }
       }
     } catch (err) {
       if (err.details) {
         // body validation error
+        log.error(`There was validation errors in body request. Errors: [${err.message}]`);
         res.status(422).json({ errors: err.details });
       } else {
+        log.error(`Something went wrong. Error [${err.message}]`);
         res.status(500).json({ error: err.message });
       }
     }

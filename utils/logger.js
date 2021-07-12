@@ -8,6 +8,16 @@ const insertDate = winston.format((info) => {
     return info
 })
 
+const colors = {
+    error: 'red',
+    warn: 'yellow',
+    info: 'green',
+    http: 'magenta',
+    debug: 'white',
+  }
+
+winston.addColors(colors)
+
 /**
  * Logger will show in console and save in logs/aplication-logs.log file important information about what the server is doing.
  * 'info', 'warn', 'error' and 'debug' got their own colors.
@@ -20,13 +30,14 @@ const insertDate = winston.format((info) => {
  * log.error(error) // error: [The error message]
  * log.debug(req.body) // debug:[{body}] to use it as console.log
  */
-module.exports = winston.createLogger({
+
+const logger = winston.createLogger({
     transports: [
         new winston.transports.Console({
             level:'debug',
             handleExceptions: true,
             format: winston.format.combine(
-                winston.format.colorize(),
+                winston.format.colorize({all: true}),
                 winston.format.simple()
             )
         }),
@@ -43,3 +54,5 @@ module.exports = winston.createLogger({
         })
     ]
 });
+
+module.exports = logger;

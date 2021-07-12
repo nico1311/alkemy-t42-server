@@ -7,6 +7,7 @@ module.exports = {
         name: 'Contact',
         phone: '555-5555',
         email: 'contact@mail.com',
+        message:'message de ejemplo 1',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -14,6 +15,7 @@ module.exports = {
         name: 'Contact',
         phone: '555-5555',
         email: 'contact@mail.com',
+        message:'message de ejemplo 1',
         createdAt: new Date(),
         updatedAt: new Date()
       },
@@ -21,6 +23,7 @@ module.exports = {
         name: 'Contact',
         phone: '555-5555',
         email: 'contact@mail.com',
+        message:'message de ejemplo 1',
         createdAt: new Date(),
         updatedAt: new Date()
       }
