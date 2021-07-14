@@ -5,6 +5,8 @@ const checkAdmin = require('./../middlewares/checkAdmin');
 const { getAllUsers } = require('../controllers/UsersController');
 
 /* GET users listing. */
-router.get('/', [verifyToken, checkAdmin], getAllUsers);
+router.get('/',  getAllUsers);
 
 module.exports = router;
+
+//Poner arriba.
