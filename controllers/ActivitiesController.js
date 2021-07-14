@@ -37,12 +37,9 @@ module.exports = {
                 res.status(404).end();
             }
 
-            await activity.update(req.body, {
-                where: { id: id }
-            });
             log.info(`Activity with id [${id}] was edited`);
-            const editedActivity = await activity.findByPk(id);
-            res.status(200).json(editedActivity);
+            await specificActivity.findByPk(id);
+            res.status(200).json(specificActivity);
         } catch (err) {
             log.error(`Error happened trying to edit activity with id [${id}]. Error: [${err.message}] `);
             res.status(500).json({Error: err.message});

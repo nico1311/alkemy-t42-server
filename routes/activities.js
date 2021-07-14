@@ -5,6 +5,6 @@ const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
 
 Router.get('/', getAllActivities);
-Router.put('/:id', editActivity);
+Router.put('/:id', [verifyToken, checkAdmin] ,editActivity);
 
 module.exports = Router
