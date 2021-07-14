@@ -1,4 +1,4 @@
-const { Testimonials } = require('../models');
+const { Testimony } = require('../models');
 const log = require('../utils/logger')
 
 module.exports = {
@@ -10,12 +10,39 @@ module.exports = {
    */
   async createTestimonial(req, res) {
     try {
-      const response = await Testimonials.create(req.body);
+      const response = await Testimony.create(req.body);
       log.info('Testimonial created');
       res.json(response);
     } catch (err) {
       log.error(`There was an error creating a testimonial. Error [${err.message}]`)
       res.status(500).json({ error: err.message });
     }
+  },
+  async putTestimonial(req, res) {
+    log.info('Editing an testimonial');
+    const id = req.params.id;
+
+    try{
+      const testimonial = await Testimony.findByPk(id);
+
+      if(!testimonial)
+      {
+        log.warn(`Entry with id [${id}]`);
+        return res.status(404).json("Testimonial not found");
+      }
+
+      const operation = await testimonial.update(req.body);
+
+      if(operation)
+      {
+        log.info(`Testimonial with id [${id}] was edited`);
+        return res.status(200).json(testimonial);
+      }
+    } catch(err) {
+      console.log(err);
+      log.error(`Error happened trying to edit a testimonial. Error: [${err.message}]`);
+      return res.status(500).json("Ha ocurrido un error. Por favor, inténtelo nuevamente");
+    }
+    
   }
 };
