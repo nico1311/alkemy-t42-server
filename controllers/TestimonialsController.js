@@ -24,7 +24,7 @@ module.exports = {
     try {
       const response = await Testimony.create(req.body);
       log.info('Testimonial created');
-      res.json(response);
+      res.status(201).json(response);
     } catch (err) {
       log.error(`There was an error creating a testimonial. Error [${err.message}]`)
       res.status(500).json({ error: err.message });
@@ -43,13 +43,12 @@ module.exports = {
         return res.status(404).json("Testimonial not found");
       }
 
-      const operation = await testimonial.update(req.body);
+      await testimonial.update(req.body);
 
-      if(operation)
-      {
-        log.info(`Testimonial with id [${id}] was edited`);
-        return res.status(200).json(testimonial);
-      }
+      
+      log.info(`Testimonial with id [${id}] was edited`);
+      return res.status(200).json(testimonial);
+      
     } catch(err) {
       console.log(err);
       log.error(`Error happened trying to edit a testimonial. Error: [${err.message}]`);
