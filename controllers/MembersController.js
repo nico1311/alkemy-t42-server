@@ -10,8 +10,8 @@ module.exports = {
         })
 
         try {
-            log.info('Creating new member')
-            await memberSchema.validateAsync(req.body)
+            log.info('Creating new member');
+            await memberSchema.validateAsync(req.body);
             
             // Default value in image
             const newMember = {
@@ -19,17 +19,17 @@ module.exports = {
                 image: `${req.body.image || 'imagen.jpg'}`
             }
 
-            const member = await Member.create(newMember)
-            log.info('Member created')
-            res.json({newMember: member})
+            const member = await Member.create(newMember);
+            log.info('Member created');
+            res.status(201).json({newMember: member});
         } catch (err) {
             if(err.details){
                 //body validation error
-                log.warn(`Body validation error. [${err.message}]`)
-                res.status(422).json({errors: err.message})
+                log.warn(`Body validation error. [${err.message}]`);
+                res.status(422).json({errors: err.message});
             } else {
-                log.error(`Error happened trying to create a member. Error: [${err.message}]`)
-                res.status(500).json({error: err.message})
+                log.error(`Error happened trying to create a member. Error: [${err.message}]`);
+                res.status(500).json({error: err.message});
             }
         }
     }
