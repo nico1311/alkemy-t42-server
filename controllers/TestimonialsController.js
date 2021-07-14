@@ -2,6 +2,18 @@ const { Testimony } = require('../models');
 const log = require('../utils/logger')
 
 module.exports = {
+  async getTestimonials(req, res)
+  {
+    try{
+      const testimonials = await Testimony.findAll();
+
+      log.info('Sended all testimonials');
+      return res.status(200).json({Testimonials: testimonials});
+    } catch(err){
+      log.error(`Error happened trying sending the users. Error: [${err.message}]`)
+      res.status(500).json("Ha ocurrido un error. Por favor, inténtelo nuevamente.");
+    }
+  },
   /**
    * Create a testimonial
    * @param {import('express').Request} req
