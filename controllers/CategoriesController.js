@@ -29,6 +29,7 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async updateCategory(req, res) {
+    log.info('Try updating an category');
     const { id } = req.params;
     try {
       const category = await Category.findByPk(id);
@@ -36,7 +37,9 @@ module.exports = {
         log.warn(`Tried to update non-existing category: [${id}]`);
         return res.status(404).json({ error: 'Category not found' });
       }
-      const update = await entry.update(req.body);
+      const update = await Category.update(req.body, {
+        where: { id }
+      });
       if (update) {
         log.info(`Category with id [${id}] updated`);
         res.status(202).end();
