@@ -1,15 +1,17 @@
 const express = require('express');
-const router = express.Router();
-const verifyToken = require('../middlewares/verifyToken');
-const checkAdmin = require('./../middlewares/checkAdmin');
+const Router = express.Router();
 const {
   getAllActivities,
+  editActivity,
   getOneActivity,
   deleteActivity
 } = require('../controllers/ActivitiesController');
+const verifyToken = require('../middlewares/verifyToken');
+const checkAdmin = require('../middlewares/checkAdmin');
 
-router.get('/:id', getOneActivity);
-router.get('/', getAllActivities);
-router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
+Router.get('/', getAllActivities);
+Router.get('/:id', getOneActivity);
+Router.put('/:id', [verifyToken, checkAdmin], editActivity);
+Router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
 
-module.exports = router;
+module.exports = Router;
