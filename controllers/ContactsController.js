@@ -47,5 +47,19 @@ module.exports = {
       log.error(`Èrror happened trying to send all contact. Error: [${err.message}]`)
       res.status(500).json({ error: err.message });
     }
+  },
+
+  async deleteContact(req, res) {
+    try {
+      const contact = await Contact.findByPk(req.params.id);
+
+      if(!contact) return res.status(404).json({Error: "Contact not found"});
+
+      const operation = contact.destroy();
+
+      if(operation) return res.status(200).json("Entry successfully deleted");
+    } catch(err){
+      res.status(500).json({ Error: err });
+    }
   }
 };
