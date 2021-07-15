@@ -6,6 +6,6 @@ const checkAdmin = require('../middlewares/checkAdmin')
 
 // falta poner los middlewares de seguridad
 Router.get('/', verifyToken, getMember)
-Router.post('/', createMember)
+Router.post('/', [verifyToken, checkAdmin], createMember)
 
 module.exports = Router
