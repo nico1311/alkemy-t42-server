@@ -9,3 +9,5 @@ router.get('/', [verifyToken, checkAdmin], getAllUsers);
 router.delete('/:id', deleteUser)
 
 module.exports = router;
+
+//Poner arriba.

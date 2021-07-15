@@ -26,3 +26,6 @@ npx sequelize-cli db:seed:all
 ``` bash
 npm start
 ```
+
+## Seeders user:
+fake users data: fakeUsers.json 
