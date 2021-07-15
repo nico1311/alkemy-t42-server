@@ -4,7 +4,7 @@ const log = require('../utils/logger')
 
 module.exports = {
 
-    async getMember(req, res){
+    async getAllMembers(req, res){
         log.info('Sended all members')
         try {
         const allMembers = await Member.findAll();
