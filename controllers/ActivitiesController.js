@@ -72,7 +72,7 @@ module.exports = {
     const id = req.params.id;
     log.info(`Editing activity with id [${id}]`);
     try {
-      const specificActivity = await activity.findByPk(id);
+      const specificActivity = await Activity.findByPk(id);
 
       if (specificActivity === null) {
         log.warn(`Activity with id [${id}] does not exist`);
