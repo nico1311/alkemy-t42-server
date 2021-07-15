@@ -10,13 +10,10 @@ module.exports = {
    */
   async getAllCategories(req, res) {
     try {
-      const categoriesQuery = await Category.findAll();
-      const categories = categoriesQuery.map((category) => {
-        return ({
-          id: category.id,
-          name: category.name          
-        });
+      const categories = await Category.findAll({
+        attributes: ['id', 'name']
       });
+
       res.status(200).json({ categories });
     } catch (err) {
       res.status(500).json({ error: err.message });
