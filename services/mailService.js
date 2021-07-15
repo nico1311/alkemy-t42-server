@@ -51,6 +51,7 @@ const sgMail = require('@sendgrid/mail');
 const sendMail = async ({
   to,
   from,
+  subject,
   text,
   html,
   sandboxMode = false,
@@ -62,8 +63,8 @@ const sendMail = async ({
     try {
       return await sgMail.send({
         to,
-        from,
-        subject: process.env.SENDGRID_VERIFY_SENDER,
+        from: process.env.SENDGRID_VERIFY_SENDER,
+        subject,
         text,
         html,
         mail_settings: {
