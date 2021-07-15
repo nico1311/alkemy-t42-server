@@ -1,5 +1,4 @@
 const { Activity } = require('../models');
-const Joi = require('Joi');
 const log = require('../utils/logger');
 
 module.exports = {
@@ -30,12 +29,12 @@ module.exports = {
   async getOneActivity(req, res) {
     try {
       const activity = await Activity.findOne({ where: { id: req.params.id } });
-      if (activity === null) {
-        log.error('Activity Not Found.');
-        res.sendStatus(404);
-      } else {
+      if (activity) {
         log.info('Sending one activity');
         res.status(200).json({ Activity: activity });
+      } else {
+        log.error('Activity Not Found.');
+        res.sendStatus(404);
       }
     } catch (err) {
       log.error(
@@ -54,7 +53,7 @@ module.exports = {
     try {
       const response = await Activity.destroy({ where: { id: req.params.id } });
       log.info('Deleting one activity');
-      if (response == 1) res.sendStatus(204);
+      if (response === 1) res.sendStatus(204);
       else res.sendStatus(404);
     } catch (err) {
       log.error(

@@ -1,5 +1,5 @@
 const express = require('express');
-const Router = express.Router();
+const router = express.Router();
 const {
   getAllActivities,
   editActivity,
@@ -9,9 +9,9 @@ const {
 const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
 
-Router.get('/', getAllActivities);
-Router.get('/:id', getOneActivity);
-Router.put('/:id', [verifyToken, checkAdmin], editActivity);
-Router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
+router.get('/', getAllActivities);
+router.get('/:id', getOneActivity);
+router.put('/:id', [verifyToken, checkAdmin], editActivity);
+router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
 
-module.exports = Router;
+module.exports = router;
