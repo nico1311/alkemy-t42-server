@@ -1,5 +1,5 @@
 const { activity } = require('../models')
-const Joi = require('Joi')
+const Joi = require('joi')
 const log = require('../utils/logger')
 
 module.exports = {
@@ -18,6 +18,33 @@ module.exports = {
         } catch (err) {
             log.err(`Error happened trying to send all the activities. Error: [${err.message}]`)
             res.status(500).json({Error: err.message})
+        }
+    },
+
+    /**
+     * Edit specific activity by id
+     * @param {import('express').Request} req 
+     * @param {import('express'.Response)} res
+     * @returns {Promise<void>} 
+     */
+    async editActivity(req, res) {
+        const id = req.params.id;
+        log.info(`Editing activity with id [${id}]`);
+        try {
+            const specificActivity = await activity.findByPk(id);
+
+            if(specificActivity === null){
+                log.warn(`Activity with id [${id}] does not exist`);
+                res.status(404).end();
+            }
+
+            log.info(`Activity with id [${id}] was edited`);
+            await specificActivity.update(req.body);
+            res.status(200).json(specificActivity);
+
+        } catch (err) {
+            log.error(`Error happened trying to edit activity with id [${id}]. Error: [${err.message}] `);
+            res.status(500).json({Error: err.message});
         }
     }
 }
