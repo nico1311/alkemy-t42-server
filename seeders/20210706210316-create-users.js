@@ -14,6 +14,7 @@ module.exports = {
         email: faker.internet.email(),
         image:
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
+        // Password not encrypted.
         password: faker.internet.password(),
         roleId: 1,
         createdAt: new Date(),
@@ -28,6 +29,7 @@ module.exports = {
         email: faker.internet.email(),
         image:
           'https://www.designevo.com/res/templates/thumb_small/colorful-hand-and-warm-community.png',
+        // Password not encrypted.
         password: faker.password,
         roleId: 2,
         createdAt: new Date(),
