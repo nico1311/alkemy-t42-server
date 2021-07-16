@@ -10,7 +10,11 @@ module.exports = {
    */
   async getPublicData(req, res) {
     try {
-      const publicData = await PublicData.findAll();
+      const publicData = await PublicData.findOne({
+        attributes: {
+          exclude: ['id', 'createdAt', 'updatedAt']
+        }
+      });
       log.info('Seending Public Data');
       res.status(200).json({ publicData: publicData });
     } catch (error) {
