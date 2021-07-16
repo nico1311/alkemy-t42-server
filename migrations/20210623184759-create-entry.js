@@ -26,7 +26,7 @@ module.exports = {
         references: {
           model: 'Categories',
           key: 'id'
-        }
+        },
       },
       type: {
         allowNull: false,

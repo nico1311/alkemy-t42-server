@@ -1,5 +1,7 @@
 const { Category } = require('../models');
+const { debug } = require('../utils/logger');
 const log = require('../utils/logger');
+const {Entry} = require('../models');
 
 module.exports = {
   /**
@@ -17,9 +19,11 @@ module.exports = {
           name: category.name
         };
       });
+      log.debug(categories);
       res.status(200).json({ categories });
     } catch (err) {
       res.status(500).json({ error: err.message });
+      log.error(`Error happened trying to getting categories. Error; [${err.message}]`)
     }
   },
   /**
@@ -87,10 +91,21 @@ module.exports = {
         log.warn(`Tried to delete non-existing category: [${id}]`);
         return res.status(404).json({ error: 'Category not found' });
       }
+
+      //If you wanna delete a category, you should delete all entries with that cateogories first yeah ;)
+      const entries = await Entry.findAll({where : {categoryId: id}});
+      entries.map(async (entry) => 
+      {
+        await entry.destroy();
+      })
+
+
       await category.destroy();
       log.info(`Category with id [${id}] deleted`);
       res.status(204).end();
     } catch (err) {
+      log.warn(`Error ${err.message}`)
+      console.log(err);
       res.status(500).json({ error: err.message });
     }
   }

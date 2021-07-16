@@ -20,6 +20,5 @@ router.use('/users', usersRouter);
 router.use('/news', entriesRouter);
 router.use('/members', membersRouter);
 router.use('/activities', activitiesRouter);
-router.use('/categories', categoriesRouter);
 
 module.exports = router;
