@@ -4,7 +4,7 @@ const log = require('../utils/logger')
 const verifyToken = require('../middlewares/verifyToken');
 const publicDataController = require('../controllers/PublicDataController')
 
-router.get('/', [verifyToken], publicDataController.getOrganization)
+router.get('/', publicDataController.getOrganization)
 router.put('/', [verifyToken], publicDataController.editOrganization)
 
 module.exports = router;
