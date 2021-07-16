@@ -4,7 +4,8 @@ const {
   getAllActivities,
   editActivity,
   getOneActivity,
-  deleteActivity
+  deleteActivity,
+  createActivity
 } = require('../controllers/ActivitiesController');
 const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
@@ -12,6 +13,7 @@ const checkAdmin = require('../middlewares/checkAdmin');
 router.get('/', getAllActivities);
 router.get('/:id', getOneActivity);
 router.put('/:id', [verifyToken, checkAdmin], editActivity);
+router.post('/', [verifyToken, checkAdmin], createActivity);
 router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
 
 module.exports = router;
