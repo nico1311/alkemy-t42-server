@@ -10,7 +10,6 @@ const testimonialsRouter = require('./testimonials');
 const usersRouter = require('./users');
 const membersRouter = require('./members')
 const activitiesRouter = require('./activities');
-const categoriesRouter = require('./categories');
 
 router.use('/auth', authRouter);
 router.use('/categories', categoriesRouter);

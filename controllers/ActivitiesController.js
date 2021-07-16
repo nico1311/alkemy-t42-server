@@ -1,5 +1,6 @@
 const { Activity } = require('../models');
 const log = require('../utils/logger');
+const Joi = require('joi')
 
 module.exports = {
   /**

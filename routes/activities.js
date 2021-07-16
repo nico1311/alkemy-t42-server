@@ -13,7 +13,7 @@ const checkAdmin = require('../middlewares/checkAdmin');
 router.get('/', getAllActivities);
 router.get('/:id', getOneActivity);
 router.put('/:id', [verifyToken, checkAdmin], editActivity);
-Router.post('/', [verifyToken, checkAdmin], createActivity);
+router.post('/', [verifyToken, checkAdmin], createActivity);
 router.delete('/:id', [verifyToken, checkAdmin], deleteActivity);
 
 module.exports = router;
