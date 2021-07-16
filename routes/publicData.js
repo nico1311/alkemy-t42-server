@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const log = require('../utils/logger')
 
 router.get('/', (req, res) => {
   //get to endpoint "/organizations/1/public"
@@ -26,9 +27,10 @@ router.get('/', (req, res) => {
         }
       ]
     };
+    log.info('Public data sended')
     res.status(200).json(publicData);
   } catch (error) {
-    console.error(error);
+    log.error(`Error happened trying to send public data. Error: [${error}]`)
     res.status(500).send('Server error');
   }
 });

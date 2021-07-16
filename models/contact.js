@@ -13,16 +13,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Contact.init(
     {
-      contactId: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.INTEGER
-      },
       name: DataTypes.STRING,
-      phone: DataTypes.STRING,
       email: DataTypes.STRING,
-      deleteAt: DataTypes.DATEONLY
+      message: DataTypes.STRING(2048)
     },
     {
       sequelize,
@@ -31,3 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   return Contact;
 };
+
+/*Agregar esto en sequelize, modelName y migrar de nuevo.
+paranoid: true,
+timestamps: true, */
