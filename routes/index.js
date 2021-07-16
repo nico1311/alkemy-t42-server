@@ -10,6 +10,7 @@ const testimonialsRouter = require('./testimonials');
 const usersRouter = require('./users');
 const membersRouter = require('./members')
 const activitiesRouter = require('./activities');
+const categoriesRouter = require('./categories');
 
 router.use('/auth', authRouter);
 router.use('/categories', categoriesRouter);
@@ -20,5 +21,6 @@ router.use('/users', usersRouter);
 router.use('/news', entriesRouter);
 router.use('/members', membersRouter);
 router.use('/activities', activitiesRouter);
+router.use('/categories', categoriesRouter);
 
 module.exports = router;

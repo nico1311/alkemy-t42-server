@@ -1,5 +1,4 @@
-const { activity } = require('../models');
-const Joi = require('joi');
+const { Activity } = require('../models');
 const log = require('../utils/logger');
 
 module.exports = {
@@ -11,17 +10,58 @@ module.exports = {
    */
   async getAllActivities(req, res) {
     try {
-      const activities = await activity.findAll();
-      log.info('Seending all the activities');
+      const activities = await Activity.findAll();
+      log.info('Sending all the activities');
       res.status(200).json({ activities: activities });
     } catch (err) {
-      log.err(
+      log.error(
         `Error happened trying to send all the activities. Error: [${err.message}]`
       );
       res.status(500).json({ Error: err.message });
     }
   },
-
+  /**
+   * Get one acitivity
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  async getOneActivity(req, res) {
+    try {
+      const activity = await Activity.findOne({ where: { id: req.params.id } });
+      if (activity) {
+        log.info('Sending one activity');
+        res.status(200).json({ Activity: activity });
+      } else {
+        log.error('Activity Not Found.');
+        res.sendStatus(404);
+      }
+    } catch (err) {
+      log.error(
+        `Error happened trying to send the activity. Error: [${err.message}]`
+      );
+      res.status(500).json({ Error: err.message });
+    }
+  },
+  /**
+   * Delete one acitivity
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+  async deleteActivity(req, res) {
+    try {
+      const response = await Activity.destroy({ where: { id: req.params.id } });
+      log.info('Deleting one activity');
+      if (response === 1) res.sendStatus(204);
+      else res.sendStatus(404);
+    } catch (err) {
+      log.error(
+        `Error happened trying to delete the activity. Error: [${err.message}]`
+      );
+      res.status(500).json({ Error: err.message });
+    }
+  },
   /**
    * Edit specific activity by id
    * @param {import('express').Request} req
@@ -32,7 +72,7 @@ module.exports = {
     const id = req.params.id;
     log.info(`Editing activity with id [${id}]`);
     try {
-      const specificActivity = await activity.findByPk(id);
+      const specificActivity = await Activity.findByPk(id);
 
       if (specificActivity === null) {
         log.warn(`Activity with id [${id}] does not exist`);
@@ -70,8 +110,8 @@ module.exports = {
     log.info('Create new activity');
     try {
       const value = await activitySchemas.validateAsync(req.body);
-      const Activity = await activity.create(value);
-      res.status(201).json(Activity);
+      const newActivity = await Activity.create(value);
+      res.status(201).json(newActivity);
       log.info('Activity created');
     } catch (error) {
       if (error.details) {

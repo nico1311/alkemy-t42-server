@@ -3,6 +3,18 @@ const { Member } = require('../models')
 const log = require('../utils/logger')
 
 module.exports = {
+
+    async getAllMembers(req, res){
+        log.info('Sended all members')
+        try {
+        const allMembers = await Member.findAll();
+        res.status(200).json({allMembers})
+        } catch (error) {
+            log.warn(`Something went wrong. Error: [${error.message}]`)
+            res.status(500).json(error.message)
+        }
+    },
+
     async createMember(req, res){
         const memberSchema = Joi.object({
             name: Joi.string().min(3).max(30).required(),
