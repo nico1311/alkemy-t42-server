@@ -26,25 +26,37 @@ describe('API route /api/users - Request GET - Get all users', () => {
   });
 
   test('Get all users with token but user not is admin.', async () => {
+    // Login with normal user.
+    const userLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'user@mail.com',
+        password: '123456'
+      });
+    // Check api with userLogged.body.token
     await api
       .get('/api/users')
       .set('Content-Type', 'application/json')
-      .set(
-        'Authorization',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTYyNjcwMzAzOCwiZXhwIjoxNjI2ODc1ODM4fQ.Sb0qTtUTC57IIdU2rt9fBSVsaZsLmPhOhh-0XXmZHmU'
-      )
+      .set('Authorization', userLogged.body.token)
       .expect('Content-Type', /json/)
       .expect(403, { error: 'Admin role required' });
   });
 
   test('Get all users with token valid and is admin.', async () => {
+    // Login with admin user.
+    const adminLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'admin@mail.com',
+        password: '123456'
+      });
+    // Check api with adminLogged.body.token
     await api
       .get('/api/users')
       .set('Content-Type', 'application/json')
-      .set(
-        'Authorization',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTYyNjY5OTkwNCwiZXhwIjoxNjI2ODcyNzA0fQ.FdREzZON5YJEf8mfarjIaI5MAgpL_dlC_xaHanJaUP4'
-      )
+      .set('Authorization', adminLogged.body.token)
       .expect('Content-Type', /json/)
       .expect(200);
   });
