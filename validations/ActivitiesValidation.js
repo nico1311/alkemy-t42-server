@@ -18,7 +18,7 @@ const validateActivity = (req,res,next) => {
     if(!result.error){
         next();
     } else {
-        log.warn(`New activity have body errors: [${result.error.message}]`);
+        log.warn(`Activity have body errors: [${result.error.message}]`);
         res.status(400).send(result.error.message);
     }
 }
