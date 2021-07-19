@@ -1,6 +1,6 @@
 const supertest = require('supertest');
 const { app } = require('../app');
-const { register } = require('../controllers/AuthController');
+const { User } = require('../models');
 // Set supertest to fake api.
 const api = supertest(app);
 // Request GET for /api/users
@@ -12,6 +12,7 @@ describe('API route /api/users - Request GET - Get all users', () => {
       .expect('Content-Type', /json/)
       .expect(400, { error: 'No token provided' });
   });
+
   test('Get all users with token not authorized.', async () => {
     await api
       .get('/api/users')
@@ -23,6 +24,7 @@ describe('API route /api/users - Request GET - Get all users', () => {
       .expect('Content-Type', /json/)
       .expect(401, { error: 'Unauthorized' });
   });
+
   test('Get all users with token but user not is admin.', async () => {
     await api
       .get('/api/users')
@@ -34,6 +36,7 @@ describe('API route /api/users - Request GET - Get all users', () => {
       .expect('Content-Type', /json/)
       .expect(403, { error: 'Admin role required' });
   });
+
   test('Get all users with token valid and is admin.', async () => {
     await api
       .get('/api/users')
@@ -54,20 +57,19 @@ describe('API route /api/users/:id - Request DELETE - Delete User', () => {
       .set('Content-Type', 'application/json')
       .expect(404);
   });
+
   test('Create an user and remove.', async () => {
-    // Make request POST to create a new user.
-    const newUser = await api
-      .post('/api/auth/register')
-      .set('Content-Type', 'application/json')
-      .send({
-        first_name: 'Test',
-        last_name: 'Jest',
-        email: 'testjest@gmail.com',
-        password: '12345678'
-      });
+    // Make a new user with model on sequelize.
+    const user = await User.create({
+      firstName: 'TestDelete',
+      lastName: 'JestDelete',
+      email: 'testjestDelete@gmail.com',
+      password: '12345678',
+      roleId: 2
+    });
     // Delete new user.
     await api
-      .delete(`/api/users/${newUser.body.user.id}`)
+      .delete(`/api/users/${user.dataValues.id}`)
       .set('Content-Type', 'application/json')
       .expect(204);
   });
