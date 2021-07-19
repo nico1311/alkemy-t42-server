@@ -9,7 +9,7 @@ const {
 } = require('../controllers/ActivitiesController');
 const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
-const validateActivity = require('../valdations/ActivitiesValidation');
+const validateActivity = require('../validations/ActivitiesValidation');
 
 router.get('/', getAllActivities);
 router.get('/:id', getOneActivity);
