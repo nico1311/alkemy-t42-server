@@ -7,8 +7,9 @@ const {
   getAllContacts,
   deleteContact
 } = require('../controllers/ContactsController');
+const validateContact = require('../validations/ContactsValidation');
 
-router.post('/', createContact);
+router.post('/', validateContact ,createContact);
 router.get('/', [verifyToken, checkAdmin], getAllContacts);
 router.delete('/:id', [verifyToken, checkAdmin], deleteContact );
 

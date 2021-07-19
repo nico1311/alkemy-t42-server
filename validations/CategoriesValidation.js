@@ -16,7 +16,6 @@ const validateCategory = (req,res,next) => {
     if(!result.error){
         next();
     } else {
-        console.log('Llego hasta la validacion');
         log.warn(`Category have body errors: [${result.error.message}]`);
         res.status(400).json({error: result.error.message});
     }

@@ -1,7 +1,6 @@
 const { Category } = require('../models');
 const log = require('../utils/logger');
 const { Entry } = require('../models');
-const Joi = require('joi')
 
 module.exports = {
   /**

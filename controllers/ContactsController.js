@@ -1,5 +1,4 @@
 const { Contact } = require('../models');
-const Joi = require('joi');
 const log = require('../utils/logger')
 
 module.exports = {
@@ -10,14 +9,10 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async createContact(req, res) {
-    const contactSchema = Joi.object({
-      name: Joi.string().min(2).required(),
-      email: Joi.string().email().required(),
-      message: Joi.string().min(10).max(2048).required()
-    });
+    
     log.info('Creating contact')
     try {
-      const values = await contactSchema.validateAsync(req.body);
+      const values = req.body;
       const contact = await Contact.create(values);
 
       res.status(201).json(contact);
