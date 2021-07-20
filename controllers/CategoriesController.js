@@ -37,7 +37,6 @@ module.exports = {
       const category = await Category.create(values);
       res.status(201).json(category);
     } catch (err) {
-      console.log('Llego hasta aca');
       res.status(500).json({ error: err.message });
     }
   },
