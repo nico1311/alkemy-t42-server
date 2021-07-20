@@ -44,5 +44,29 @@ module.exports = {
                 res.status(500).json({error: err.message});
             }
         }
+    },
+
+    /**
+     * Delete a member
+     * @param {import('express').Request} req
+     * @param {import('express').Response} res
+     * @returns {Promise<void>}
+     */
+    async deleteMember(req, res) {
+        const { id } = req.params;
+
+        try {
+            const member = await Member.findByPk(id);
+            if (!member) return res.status(404).json({ error: 'member not found' });
+
+            await member.destroy();
+
+            log.info(`Member with id [${id}] deleted`);
+            res.status(204).end();
+        } catch (err) {
+          log.warn(`Error deleting member: ${err.message}`)
+          console.error(err);
+          res.status(500).json({ error: err.message });            
+        }
     }
 }
