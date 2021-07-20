@@ -6,8 +6,8 @@
     "dev": "nodemon ./bin/www",
     "start": "node ./bin/www",
     "prettier": "prettier --write **/*.{js,ts} && prettier --check **/*.{js,ts}",
-    "test": "jest --verbose --runInBand",
-    "test-coverage": "jest --coverage --verbose --runInBand",
+    "test": "jest --verbose --runInBand ./test",
+    "test-coverage": "jest --coverage --verbose --runInBand ./test",
     "see-coverage": "cd coverage/lcov-report && index.html"
   },
   "dependencies": {
