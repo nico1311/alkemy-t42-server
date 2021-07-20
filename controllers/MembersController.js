@@ -55,13 +55,13 @@ module.exports = {
             const updatingMember = await Member.findByPk(id);
             if (!updatingMember) {
                 log.warn(`Try again, not found member: ${id}`);
-                return res.status(404).json({ error: 'Member not found' });
+                return res.status(404).json({ message: 'Miembro no encontrado' });
               }
 
             const member = await updatingMember.update(req.body);
             if (member) {
                 log.info(`Member: ${id}, updated`);
-                return res.sendStatus(200);
+                return res.status(200).json(member);
             }
 
         } catch (error) {
