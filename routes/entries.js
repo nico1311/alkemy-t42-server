@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
-const upload = require('../middlewares/manageFiles');
 const { getNews, getNewsDetail, putNew, deleteNew, postNew } = require('../controllers/EntriesController');
+const validateEntry = require('../validations/EntriesValidation');
 
 router.get('/', verifyToken, getNews);
 router.get('/:id', verifyToken, getNewsDetail);
-router.put('/:id', [verifyToken, checkAdmin], putNew);
+router.post('/', [verifyToken, checkAdmin, validateEntry], postNew);
+router.put('/:id', [verifyToken, checkAdmin, validateEntry], putNew);
 router.delete('/:id', [verifyToken, checkAdmin], deleteNew );
-router.post('/', [verifyToken, checkAdmin], postNew);
 
 
 module.exports = router;

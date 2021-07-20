@@ -8,10 +8,11 @@ const {
   updateCategory,
   createCategory
 } = require('../controllers/CategoriesController');
+const validateCategory = require('../validations/CategoriesValidation');
 
 router.get('/', [verifyToken, checkAdmin], getAllCategories);
-router.post('/', [verifyToken, checkAdmin], createCategory);
-router.put('/:id', [verifyToken, checkAdmin], updateCategory);
+router.post('/', [verifyToken, checkAdmin, validateCategory], createCategory);
+router.put('/:id', [verifyToken, checkAdmin, validateCategory], updateCategory);
 router.delete('/:id', [verifyToken, checkAdmin], deleteCategory);
 
 module.exports = router;

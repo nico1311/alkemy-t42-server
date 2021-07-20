@@ -1,6 +1,5 @@
 const { Activity } = require('../models');
 const log = require('../utils/logger');
-const Joi = require('joi')
 
 module.exports = {
   /**
@@ -97,35 +96,17 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async createActivity(req, res) {
-    const activitySchemas = Joi.object().keys({
-      name: Joi.string().min(4).max(30).required().messages({
-        'string.min': 'The name must be at least 4 characters long',
-        'string.max': 'The name cannot be longer than 20 characters'
-      }),
-      content: Joi.string().min(15).max(1000).required().messages({
-        'string.min': 'The content must be at least 15 characters long',
-        'string.max': 'The content cannot be longer than 1000 characters'
-      }),
-      image: Joi.string().optional()
-    });
-    log.info('Create new activity');
+    log.info('Creating new activity');
     try {
-      const value = await activitySchemas.validateAsync(req.body);
+      const value = req.body;
       const newActivity = await Activity.create(value);
       res.status(201).json(newActivity);
       log.info('Activity created');
     } catch (error) {
-      if (error.details) {
-        log.warn(
-          `There was validation errors in activity. Errors: [${error.details[0].message}]`
-        );
-        res.status(422).json({ message: error.details[0].message });
-      } else {
-        log.error(
-          `Error happened trying to create a activity. Error; [${error.details[0].message}]`
-        );
-        res.status(500).json({ message: error.details[0].message });
-      }
+      log.error(
+        `Error happened trying to create a activity. Error: [${error.message}]`
+      );
+      res.status(500).json({ message: error.message });
     }
   }
 };
