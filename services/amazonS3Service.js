@@ -1,6 +1,7 @@
 /**@module amazonS3Service */
 require('dotenv/config');
-const AWS = require('aws-sdk');
+const {S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3');
+
 
 //Config info
 const region = process.env.AWS_BUCKET_REGION;
@@ -8,13 +9,8 @@ const accessKeyID = process.env.AWS_ACCESS_KEY;
 const secretKeyID = process.env.AWS_SECRET_KEY;
 const bucket = process.env.AWS_BUCKET_NAME;
 
-AWS.config.update({
-  accessKeyId: accessKeyID,
-  secretAccessKey: secretKeyID,
-  region: region
-});
 
-const s3 = new AWS.S3();
+const s3 = new S3Client({region: region, credentials: {accessKeyId: accessKeyID, secretAccessKey: secretKeyID}, signatureVersion: 'v4'});
 
 module.exports = {
   /**This function post a file in AWS S3
@@ -23,24 +19,31 @@ module.exports = {
    * @param {import('express').Response} res
    * @returns -201 & Created object // 500 & Server error
    */
-  async postFile(req, res) {
-    const file = req.file;
+  async postFile(file) {
 
     //Spaces in a file name can be troublesome if we want to use them as ID's
-    const fileName = file.originalname.replace(/ /g, '-');
+    var fileName = file.originalname.replace(/ /g, '-');
 
-    console.log(bucket);
+
+    console.log(fileName);
     const params = {
       Bucket: bucket,
       Key: fileName,
-      Body: file.buffer
+      Body: file.buffer,
+      ContentType: "image/jpeg"
     };
+    console.log('Entra');
 
-    s3.upload(params, (error, data) => {
-      if (error) return res.status(500).json({ Error: error });
+    try{
+      const command = new PutObjectCommand(params);
+      await s3.send(command);
 
-      return res.status(201).json({ Data: data });
-    });
+      const url = `https://${bucket}.s3.${region}.amazonaws.com/${fileName}`;
+      return ({path: url});
+    }catch(err){
+      console.log({error : err});
+      return false;
+    }
   },
 
   /**This function get a file from AWS S3
@@ -50,19 +53,24 @@ module.exports = {
    * @returns -200 & File // 500 & Server error
    */
 
-  async getFile(req, res) {
-    const id = req.params.id;
-
+  async getFile(id) {
     const params = {
       Bucket: bucket,
-      Key: id
+      Key: id,
     };
 
-    s3.getObject(params, (error, data) => {
-      if (error) return res.status(500).json({ Error: error });
 
-      return res.status(200).json({ Data: data });
-    });
+    const command = new GetObjectCommand(params);
+    
+    try{
+      const image = await s3.send(command);
+      
+      return ({url : image})
+    }catch(err){
+      console.log(err);
+
+      return({error: err});
+    }
   },
 
   /**This function deletes a file from AWS S3
@@ -71,18 +79,23 @@ module.exports = {
    * @param {import('express').Response} res
    * @returns -200 & "File successfully deleted" // 500 & Server error
    */
-  async deleteFile(req, res) {
-    const id = req.params.id;
+  async deleteFile(id) {
 
     const params = {
       Bucket: bucket,
       Key: id
     };
 
-    s3.deleteObject(params, (error) => {
-      if (error) return res.status(500).json({ Error: error });
+    const command = new DeleteObjectCommand(params)
 
-      return res.status(200).json('File successfully deleted');
-    });
+    try{
+      const operation = await s3.send(command);
+
+      if(operation.$metadata.httpStatusCode == 204) return false;
+      return true;
+    } catch(err){
+      console.log(err);
+      return false;
+    }
   }
 };
