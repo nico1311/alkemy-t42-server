@@ -1,4 +1,3 @@
-const Joi = require('joi');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
 const TokenService = require('../services/TokenService');
@@ -14,13 +13,9 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async login(req, res) {
-    const loginSchema = Joi.object({
-      email: Joi.string().email().required(),
-      password: Joi.string().min(6).required()
-    });
 
     try {
-      const values = await loginSchema.validateAsync(req.body);
+      const values = req.body;
       const { email, password } = values;
 
       log.info(`User [${email}] is trying to login`);
@@ -50,14 +45,8 @@ module.exports = {
         }
       }
     } catch (err) {
-      if (err.details) {
-        // body validation error
-        log.error(`There was validation errors in body request. Errors: [${err.message}]`);
-        res.status(422).json({ errors: err.details });
-      } else {
-        log.error(`Something went wrong. Error [${err.message}]`);
-        res.status(500).json({ error: err.message });
-      }
+      log.error(`Something went wrong. Error [${err.message}]`);
+      res.status(500).json({ error: err.message });
     }
   },
 
@@ -68,15 +57,7 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async register(req, res) {
-    const registrationSchema = Joi.object({
-      first_name: Joi.string().required(),
-      last_name: Joi.string().required(),
-      email: Joi.string().email().required(),
-      password: Joi.string().min(6).required()
-    });
-
     try {
-      const values = await registrationSchema.validateAsync(req.body);
       log.info(`Registering user with email: [${req.body.email}]`);
 
       const existingUser = await User.findOne({
@@ -115,13 +96,8 @@ module.exports = {
       log.info(`User [${sentValues.firstName}] was registered and login`);
       res.status(201).json({ user: sentValues, token });
     } catch (err) {
-      if (err.details) {
-        // body validation error
-        log.error(`Body validation error. [${err.details}]`);
-        res.status(422).json({ errors: err.details });
-      } else {
-        res.status(500).json({ error: err.message });
-      }
+      log.warn(`Error happened trying to register an user. Error: [${err.message}]`)
+      res.status(500).json({ error: err.message });
     }
   },
 
