@@ -3,10 +3,10 @@ const router = express.Router();
 const { createTestimonial, putTestimonial, getTestimonials } = require('../controllers/TestimonialsController');
 const verifyToken = require('../middlewares/verifyToken');
 const checkAdmin = require('../middlewares/checkAdmin');
-const { validateCreate } = require('./../middlewares/testimonials');
+const validateTestimonial = require('../validations/TetimonialValidation');
 
 router.get('/', verifyToken, getTestimonials);
-router.post('/', validateCreate, createTestimonial);
-router.put('/:id', [verifyToken, checkAdmin], putTestimonial);
+router.post('/', validateTestimonial, createTestimonial);
+router.put('/:id', [verifyToken, checkAdmin, validateTestimonial], putTestimonial);
 
 module.exports = router;
