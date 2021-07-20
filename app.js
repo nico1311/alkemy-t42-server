@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const morganMiddleware = require('./config/morganMiddleware');
 const cors = require('cors');
 const indexRouter = require('./routes/index');
-const imagesRoute = require('./t42-project-server/routes/images');
+const imagesRoute = require('./routes/images');
 const db = require('./models');
 const app = express();
 app.use(cors());

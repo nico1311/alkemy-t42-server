@@ -1,4 +1,4 @@
-const {postFile, getFile, deleteFile} = require('../amazonS3Service');
+const {postFile, getFile, deleteFile} = require('../services/amazonS3Service');
 
 module.exports = {
     async postImage(req, res){
@@ -7,9 +7,9 @@ module.exports = {
 
             const image = await postFile(req.file);
 
-            if(image.url)
+            if(image.path)
             {
-             console.log({image : image.url})
+             console.log({image : image.path})
              return res.status(201).json(image);
             } else {
                 return res.status(500).json({error : image.error});  

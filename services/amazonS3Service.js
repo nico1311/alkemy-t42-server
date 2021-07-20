@@ -25,14 +25,12 @@ module.exports = {
     var fileName = file.originalname.replace(/ /g, '-');
 
 
-    console.log(fileName);
     const params = {
       Bucket: bucket,
       Key: fileName,
       Body: file.buffer,
       ContentType: "image/jpeg"
     };
-    console.log('Entra');
 
     try{
       const command = new PutObjectCommand(params);
