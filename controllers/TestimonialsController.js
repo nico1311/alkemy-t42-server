@@ -9,12 +9,8 @@ module.exports = {
       log.info('Sended all testimonials');
       return res.status(200).json({ Testimonials: testimonials });
     } catch (err) {
-      log.error(
-        `Error happened trying sending the users. Error: [${err.message}]`
-      );
-      res
-        .status(500)
-        .json('Ha ocurrido un error. Por favor, inténtelo nuevamente.');
+      log.error(`Error happened trying sending the users. Error: [${err.message}]`)
+      res.status(500).json("Ha ocurrido un error. Por favor, inténtelo nuevamente.");
     }
   },
   /**
@@ -35,6 +31,13 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   },
+
+  /**
+   * Edit a testimonial
+   * @param {import('express').Request} req 
+   * @param {import('express').Response} res 
+   * @returns {Promise<void>}
+   */
   async putTestimonial(req, res) {
     log.info('Editing an testimonial');
     const id = req.params.id;
