@@ -109,4 +109,34 @@ describe('/api/auth tests', () => {
       })
       .expect(400);
   });
+
+  test('/api/auth/me - get info about logged in user', async () => {
+    const email = 'user@mail.com';
+    const { body: loginResult } = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email,
+        password: '123456'
+      })
+      .expect(200);
+
+    const { body: userInfo } = await api
+      .get('/api/auth/me')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', loginResult.token)
+      .expect(200);
+
+    expect(userInfo).toEqual(expect.objectContaining({
+      email,
+      roleId: 2 // regular user
+    }));
+  });
+
+  test('/api/auth/me - test without logging in', async () => {
+    await api
+      .get('/api/auth/me')
+      .set('Content-Type', 'application/json')
+      .expect(400);
+  });
 });
