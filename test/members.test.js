@@ -1,18 +1,18 @@
 const supertest = require('supertest');
 const { app } = require('../app');
-const log = require('../utils/logger')
 
 const api = supertest(app)
 
-describe('API route /api/members', () => {
+describe('API route /api/members GET', () => {
     //Get all members
     test('Get all members', async () => {
         await api
             .get('/api/members')
             .expect(200)
     });
+});
 
-
+describe('API route /api/members POST', () => {
     //Creation test fails
     test('Creating a member without name beeing an admin should fail', async () => {
         const admin = await api
@@ -29,7 +29,7 @@ describe('API route /api/members', () => {
             .send({
                 image: 'image.jpg'
             })
-            .expect(500)
+            .expect(422)
     });
 
     test('Creating a member without image beeing an admin should fail', async () => {
@@ -47,7 +47,7 @@ describe('API route /api/members', () => {
             .send({
                 name: 'Mark'
             })
-            .expect(500)
+            .expect(422)
     });
 
     test('Creating a member beeing an user should fail', async () => {
@@ -98,7 +98,9 @@ describe('API route /api/members', () => {
             })
             .expect(201)
     });
+});
 
+describe('API route /api/members/:id - PUT', () => {
     //Edit tests fail
     test('Editing a member beeing an user should fail', async () => {
         const user = await api
@@ -134,7 +136,7 @@ describe('API route /api/members', () => {
             .send({
                 image: 'imageEdited.jpg',
             })
-            .expect(500)
+            .expect(422)
     });
 
     test('Editing a member without "image" beeing an admin should fail', async () => {
@@ -152,7 +154,7 @@ describe('API route /api/members', () => {
             .send({
                 name: 'Mark edited',
             })
-            .expect(500)
+            .expect(422)
     });
 
     test('Editing a member that does not exist should fail', async () => {
@@ -194,6 +196,9 @@ describe('API route /api/members', () => {
             })
             .expect(200)
     });
+});
+
+describe('API route api/members/:id DELETE', () => {
 
     //Delete test fail
     test('Deleting a member that does not exist should fail', async () => {
