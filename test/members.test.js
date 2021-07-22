@@ -184,10 +184,6 @@ describe('API route /api/members', () => {
                 password: '123456'
             })
 
-        // const { body } = await api
-        //     .get('/api/members')
-        // const { allMembers } = body
-
         await api
             .put(`/api/members/1`)
             .set('Content-Type', 'application/json')
