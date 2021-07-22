@@ -1,88 +1,100 @@
 /**@module amazonS3Service */
-require('dotenv/config');
-const AWS = require('aws-sdk');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 
 //Config info
+const s3Endpoint = process.env.AWS_ENDPOINT;
 const region = process.env.AWS_BUCKET_REGION;
 const accessKeyID = process.env.AWS_ACCESS_KEY;
 const secretKeyID = process.env.AWS_SECRET_KEY;
 const bucket = process.env.AWS_BUCKET_NAME;
 
-AWS.config.update({
-  accessKeyId: accessKeyID,
-  secretAccessKey: secretKeyID,
-  region: region
-});
+let s3Config = {
+  region: region,
+  credentials: {
+    accessKeyId: accessKeyID,
+    secretAccessKey: secretKeyID
+  },
+  signatureVersion: 'v4'
+}
 
-const s3 = new AWS.S3();
+if (s3Endpoint) {
+  s3Config.endpoint = `https://${s3Endpoint}`;
+}
+
+const s3 = new S3Client(s3Config);
+
+const getFileUrl = (filename) => s3Endpoint ?
+  `https://${bucket}.${s3Endpoint}/${filename}` :
+  `https://${bucket}.s3.${region}.amazonaws.com/${filename}`;
 
 module.exports = {
-  /**This function post a file in AWS S3
+  /**
+   * This function posts a file in AWS S3
    * @function postFile
-   * @param {import('express').Request} req
-   * @param {import('express').Response} res
-   * @returns -201 & Created object // 500 & Server error
+   * @param {import('multer').File} file
+   * @returns {Object} upload result
    */
-  async postFile(req, res) {
-    const file = req.file;
-
+  async postFile(file) {
     //Spaces in a file name can be troublesome if we want to use them as ID's
-    const fileName = file.originalname.replace(/ /g, '-');
+    var fileName = file.originalname.replace(/ /g, '-');
 
-    console.log(bucket);
     const params = {
       Bucket: bucket,
       Key: fileName,
-      Body: file.buffer
+      Body: file.buffer,
+      ContentType: "image/jpeg"
     };
 
-    s3.upload(params, (error, data) => {
-      if (error) return res.status(500).json({ Error: error });
+    const command = new PutObjectCommand(params);
+    await s3.send(command);
 
-      return res.status(201).json({ Data: data });
-    });
+    const url = getFileUrl(fileName);
+    return ({ url });
   },
 
-  /**This function get a file from AWS S3
-   * @function postFile
-   * @param {import('express').Request} req
-   * @param {import('express').Response} res
-   * @returns -200 & File // 500 & Server error
+  /**
+   * This function gets a file from AWS S3
+   * @function getFile
+   * @param {String} file key
+   * @returns {Object} upload result
    */
+  async getFile(id) {
+    const params = {
+      Bucket: bucket,
+      Key: id,
+    };
 
-  async getFile(req, res) {
-    const id = req.params.id;
+    const command = new GetObjectCommand(params);
+    const image = await s3.send(command);
 
+    if(image.Body.statusCode === 200)
+    {
+      const url = getFileUrl(id);
+      return ({ url: url });
+    } else {
+      return image;
+    }
+  },
+
+  /**
+   * This function deletes a file from AWS S3
+   * @function getFile
+   * @param {String} file key
+   * @returns {Boolean} if the operation suceeded or not
+   */
+  async deleteFile(id) {
     const params = {
       Bucket: bucket,
       Key: id
     };
 
-    s3.getObject(params, (error, data) => {
-      if (error) return res.status(500).json({ Error: error });
+    // try to get the file first, this will throw if the file doesn't exist
+    const getCommand = new GetObjectCommand(params);
+    await s3.send(getCommand);
 
-      return res.status(200).json({ Data: data });
-    });
-  },
+    const deleteCommand = new DeleteObjectCommand(params)
+    const operation = await s3.send(deleteCommand);
 
-  /**This function deletes a file from AWS S3
-   * @function postFile
-   * @param {import('express').Request} req
-   * @param {import('express').Response} res
-   * @returns -200 & "File successfully deleted" // 500 & Server error
-   */
-  async deleteFile(req, res) {
-    const id = req.params.id;
-
-    const params = {
-      Bucket: bucket,
-      Key: id
-    };
-
-    s3.deleteObject(params, (error) => {
-      if (error) return res.status(500).json({ Error: error });
-
-      return res.status(200).json('File successfully deleted');
-    });
+    return (operation.$metadata.httpStatusCode == 204);
   }
 };
