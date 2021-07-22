@@ -19,7 +19,7 @@ const validateLogin = (req,res,next) => {
         next();
     } else {
         log.warn(`Authentication have body errors: [${result.error.message}]`);
-        res.status(400).json(result.error.message);
+        res.status(422).json(result.error.message);
     }
 }
 
@@ -29,7 +29,7 @@ const validateRegister = (req, res, next) => {
         next();
     } else {
         log.warn(`Registration have body errors: [${result.error.message}]`);
-        res.status(400).json(result.error.message);
+        res.status(422).json(result.error.message);
     }
 }
 

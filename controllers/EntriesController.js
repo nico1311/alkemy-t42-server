@@ -39,14 +39,14 @@ module.exports = {
       const newsDetail = await Entry.findByPk(id);
       if(newsDetail === null){
         log.warn(`Entry with id [${id}] does not exist`);
-        res.status(404).end();
+        return res.status(404).json({Error: "Entry not found"});
       } else {
         log.info(`Sended details for entry with id [${id}]`)
-        res.json({ newsDetail });
+        return res.json({ newsDetail });
       }
     } catch (error) {
       log.error(`Error happened trying to send entry details. Error: [${error.message}]`)
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   },
 
@@ -55,10 +55,10 @@ module.exports = {
     try{
       const newPost = await Entry.create(req.body)
       log.info('New entry created')
-      res.json(newPost);
+      return res.status(201).json(newPost);
     } catch (err) {
       log.error(`Error happened trying create new entry. Error: [${err.message}]`)
-      res.status(500).json({ error: err.message });
+      return res.status(500).json({ error: err.message });
     }
   },
 
@@ -75,14 +75,14 @@ module.exports = {
 
       if(!entry){
         log.warn(`Entry with id [${id}]`)
-        res.status(404).json({Error: "Entry not found"});
+        return res.status(404).json({Error: "Entry not found"});
       } 
 
       const operation = await entry.update(req.body);
 
       if(operation){
         log.info(`Entry with id [${id}] was edited`)
-        res.status(200).json(entry);
+        return res.status(200).json(entry);
       } 
       
     } catch(err) {

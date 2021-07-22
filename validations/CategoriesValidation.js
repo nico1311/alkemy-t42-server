@@ -17,7 +17,7 @@ const validateCategory = (req,res,next) => {
         next();
     } else {
         log.warn(`Category have body errors: [${result.error.message}]`);
-        res.status(400).json({error: result.error.message});
+        res.status(422).json({error: result.error.message});
     }
 }
 

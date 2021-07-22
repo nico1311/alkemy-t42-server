@@ -15,7 +15,7 @@ const validateEntry = (req,res,next) => {
         next();
     } else {
         log.warn(`Entry have body errors: [${result.error.message}]`);
-        res.status(500).json({error: result.error.message});
+        res.status(422).json({error: result.error.message});
     }
 }
 
