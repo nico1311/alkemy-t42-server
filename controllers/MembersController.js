@@ -35,10 +35,11 @@ module.exports = {
     async updateMember(req, res){
 
         log.info('updating member');
-        const { id } = req.params.id;
+        const { id } = req.params;
 
         try {
             const updatingMember = await Member.findByPk(id);
+            console.log(updatingMember);
             if (!updatingMember) {
                 log.warn(`Try again, not found member: ${id}`);
                 return res.status(404).json({ error: 'Member not found' });
