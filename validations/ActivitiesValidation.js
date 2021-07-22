@@ -19,7 +19,7 @@ const validateActivity = (req,res,next) => {
         next();
     } else {
         log.warn(`Activity have body errors: [${result.error.message}]`);
-        res.status(400).send(result.error.message);
+        res.status(422).send(result.error.message);
     }
 }
 
