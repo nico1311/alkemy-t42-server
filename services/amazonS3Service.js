@@ -67,7 +67,13 @@ module.exports = {
     const command = new GetObjectCommand(params);
     const image = await s3.send(command);
 
-    return image;
+    if(image.Body.statusCode === 200)
+    {
+      const url = getFileUrl(id);
+      return ({ url: url });
+    } else {
+      return image;
+    }
   },
 
   /**
