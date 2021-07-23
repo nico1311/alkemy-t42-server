@@ -12,7 +12,7 @@ const validateMember = (req,res,next) => {
         next();
     } else {
         log.warn(`Member have body errors: [${result.error.message}]`);
-        res.status(500).json({error: result.error.message});
+        res.status(422).json({error: result.error.message});
     }
 };
 
