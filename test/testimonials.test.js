@@ -1,143 +1,217 @@
 const supertest = require('supertest');
 const { app } = require('../app');
-const { Testimony, User } = require('../models');
-const TokenService = require('../services/TokenService') 
-
-describe('Testimonials', () => {
-  beforeEach(() => { //Reset all mocks after running all tests.
-    jest.resetAllMocks();
-  });
+const { Testimony } = require('../models');
   
-  //Mockes creation.
-  const userAdmin = {id: 1234, roleId:1} //User admin
-  const userAdminToken = TokenService.createToken({userId: userAdmin.id})
+// Set supertest to fake api.
+const api = supertest(app);
 
-  const user = {id: 1235, roleId:2} //User no admin
-  const userToken = TokenService.createToken({userId: user.id})
-
-
-  const testimony = {name: 'Testimony 2',
-                    image: 'www.anURL.com',
-                    content: 'This is an mock example around fifty characters to test this feature'}
-
-  Testimony.findByPk = jest.fn().mockResolvedValue(testimony)
-  Testimony.findAll = jest.fn().mockResolvedValue([])
-  Testimony.create = jest.fn().mockResolvedValue(testimony)
-  User.findOne = jest.fn().mockResolvedValue(user) //Para los test donde se usan usuarios loggeados.
-
-  // Set supertest to fake api.
-  const api = supertest(app);
-  
-  // Request GET for /api/users
-  describe('API route /api/testimonials - Request GET - Get all testomonies', () => {
-    test('Get all testimonies without token Authorization.', async () => {
-      await api
-        .get('/api/testimonials')
-        .set('Content-Type', 'application/json')
-        .expect('Content-Type', /json/)
-        .expect(400, { error: 'No token provided' });
-    });
-  
-    test('Get all testimonies with token not authorized.', async () => {
-      await api
-        .get('/api/testimonials')
-        .set('Content-Type', 'application/json')
-        .set(
-          'Authorization',
-          'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYyNTY5MjQxMywiaWF0IjoxNjI1NjkyNDEzfQ.2dWAo7gqeGIrjjdo1q0accWABPfg7dQ_Zz73LSWuscw'
-        )
-        .expect('Content-Type', /json/)
-        .expect(401, { error: 'Unauthorized' });
-    });
-  
-    test('Get testimonies with token', async () => {
-      /*const userLogged = await api
-        .post('/api/auth/login/')
-        .set('Content-Type', 'application/json')  
-        .send({
-          email: 'pdos@gmail.com',
-          password: '12345678'
-        });*/
-      
-      expect(Testimony.findAll).toBeCalled(); //To make sure method is called(mocked) or not.
-
-      await api
-        .get('/api/testimonials')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', userToken)
-        .expect('Content-Type', /json/)
-        .expect(200, { Testimonials: [] });     
-    });
+// Request GET for /api/users
+describe('API route /api/testimonials - Request GET - Get all testomonies', () => {
+  test('Get all testimonies without token Authorization.', async () => {
+    await api
+      .get('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(400, { error: 'No token provided' });
   });
 
-  //post('/', [verifyToken, checkAdmin, validateTestimonial], createTestimonial);
-  describe('API route /api/testimonial - Request POST - Post Testimony', () => {
-    test('Post without being an admin', async() => {
-      await api
-        .post('/api/testimonial')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', userToken)
-        .expect('Content-Type', /json/)
-        .expect(403);
-    });
-
-    test('Post being an admin', async() => {
-      await api
-        .post('/api/testimonials')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', userAdminToken)
-        .expect('Content-Type', /json/)
-        .expect(200, { Testimonials: [] });
-    });
-
-
+  test('Get all testimonies with token not authorized.', async () => {
+    await api
+      .get('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .set(
+        'Authorization',
+        'eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTYyNTY5MjQxMywiaWF0IjoxNjI1NjkyNDEzfQ.2dWAo7gqeGIrjjdo1q0accWABPfg7dQ_Zz73LSWuscw'
+      )
+      .expect('Content-Type', /json/)
+      .expect(401, { error: 'Unauthorized' });
   });
 
-  //put('/:id', [verifyToken, checkAdmin, validateTestimonial], putTestimonial);
-  describe('API route /api/testimonial - Request PUT - Put Testimony', () => {
-    test('Testimony do not exist. ID not is valid.', async() => {
-      await api
-        .put('/api/testimonial/9001')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', userToken)
-        .expect('Content-Type', /json/)
-        .expect(404);
-    });
-    
-    test('Put without being an admin', async() => {
-      await api
-        .put(`/api/testimonial/${testimony.id}`)
-        .set('Content-Type', 'application/json')
-        .set('Authorization', userToken)
-        .expect('Content-Type', /json/)
-        .expect(403);
-    });
-  })
+  test('Get testimonies with token', async () => {
+    const userLogged = await api
+      .post('/api/auth/login/')
+      .set('Content-Type', 'application/json')  
+      .send({
+        email: 'ptres@gmail.com',
+        password: '12345678'
+      });
 
-  describe('API route /api/testimonial/:id - Request DELETE - Delete Testimony', () => {
-    test('Testimony do not exist. ID not is valid.', async () => {
-      await api
-        .delete('/api/testimonial/9001')
-        .set('Content-Type', 'application/json')
-        .expect(404);
-    });
-  
-    test('Create a testimony and remove.', async () => {
-      // Make a new testimony with model on sequelize.
-      /*const testy = await Testimony.create({
-        name: 'Testimony 2',
-        image: 'www.anURL.com',
-        content: 'This is an example around fifty characters to tess this feature, maybe a sligthy over fifty.'
-      });*/
-
-      expect(Testimony.findByPk).toBeCalled();
-      // Delete new testimony.
-      await api
-        .delete(`/api/testimonials/${testimony.id}`)
-        .set('Authorization', userAdminToken)
-        .set('Content-Type', 'application/json')
-        .expect(204);
-    });
+    await api
+      .get('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', userLogged.body.token)
+      .expect('Content-Type', /json/)
+      .expect(200);     
   });
 });
+
+describe('API route /api/testimonial - Request POST - Post Testimony', () => {
+  test('Post without being an admin', async() => {
+    await api
+      .post('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', 'testtoken123')
+      .send({
+        name: 'Create a testimony',
+        image: 'urlpostjest.com',
+        content: 'content testimony post jest'
+      })
+      .expect('Content-Type', /json/)
+      .expect(401, { error: 'Unauthorized' });
+  });
+
+  test('POST testimony with token but without admin role', async() => {
+    const userLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'ptres@gmail.com',
+        password: '12345678'
+      });
+    await api
+      .post('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', userLogged.body.token)
+      .send({
+        name: 'create testimony jest',
+        image: 'urlpostjest.com',
+        content: 'content testimony post jest'
+      })
+      .expect('Content-Type', /json/)
+      .expect(403, { error: 'Admin role required' });
+  });
+
+  test('Post being an admin and not fulfill fields requierements', async() => {
+    const adminLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'puno@gmail.com',
+        password: '12345678'
+      });
+    await api
+      .post('/api/testimonials')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', adminLogged.body.token)
+      .send({
+        name: 'do',
+        image: 'do',
+        content: 'content testimony post jest'
+      })
+      .expect('Content-Type', /json/)
+      .expect(422);
+  });
+
+  test('Post being an admin and more than fifty characters', async() => {
+    const adminLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'puno@gmail.com',
+        password: '12345678'
+      });
+    await api
+      .post('/api/activities')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', adminLogged.body.token)
+      .send({
+        name: 'create a testimony jest',
+        image: 'urlpostjest.com',
+        content: 'content testimony post jest with more than 50'
+      });
+  });
+});
+
+describe('API route /api/testimonial - Request PUT - Put Testimony', () => {
+  test('Testimony do not exist. ID not is valid.', async() => {
+    await api
+      .put('/api/testimonials/9001')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', 'testingwithjest')
+      .expect('Content-Type', /json/)
+      .expect(401);
+  });
+  
+  test('Put without being an admin', async() => {
+    await api
+      .put('/api/testimonials/1')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', 'testingwithjestandnotanadmin')
+      .expect('Content-Type', /json/)
+      .expect(401);
+  });
+
+  test('PUT testimony with token and admin role', async () => {
+    const adminLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'puno@gmail.com',
+        password: '12345678'
+      });
+    const testimony = await Testimony.create({
+      name: 'jet set',
+      image: 'jesttesturl.com',
+      content: 'jest content'
+    });
+    await api
+      .put(`/api/testimonials/${testimony.dataValues.id}`)
+      .set('Content-Type', 'application/json')
+      .set('Authorization', adminLogged.body.token)
+      .send({
+        name: 'changed jet set',
+        image: 'urltestchanged.com',
+        content: 'content testimony 1 test changed to another expresion'
+      })
+      .expect('Content-Type', /json/)
+      .expect(200)
+  });
+})
+
+describe('API route /api/testimonial/:id - Request DELETE - Delete Testimony', () => {
+  test('Testimony do not exist. ID not is valid.', async () => {
+    await api
+      .delete('/api/testimonials/9001')
+      .set('Content-Type', 'application/json')
+      .expect(400);
+  });
+
+  test('DELETE testimony with token but without admin role', async () => {
+    // Get a valid session to test token
+    const userLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'ptres@gmail.com',
+        password: '12345678'
+      });
+    await api
+      .delete('/api/testimonials/1')
+      .set('Content-Type', 'application/json')
+      .set('Authorization', userLogged.body.token)
+      .expect('Content-Type', /json/)
+      .expect(403, { error: 'Admin role required' });
+  });
+
+  test('DELETE testimony with token and admin role', async () => {
+    const testimony = await Testimony.create({
+      name: 'jest test',
+      image: 'jesttesturl.com',
+      content: 'jest content'
+    });
+    const adminLogged = await api
+      .post('/api/auth/login')
+      .set('Content-Type', 'application/json')
+      .send({
+        email: 'puno@gmail.com',
+        password: '12345678'
+      });
+    await api
+      .delete(`/api/testimonials/${testimony.dataValues.id}`)
+      .set('Content-Type', 'application/json')
+      .set('Authorization', adminLogged.body.token)
+      .expect(204);
+  });
+});
+
 
