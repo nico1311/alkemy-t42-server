@@ -32,8 +32,8 @@ describe('API route /api/testimonials - Request GET - Get all testomonies', () =
       .post('/api/auth/login/')
       .set('Content-Type', 'application/json')  
       .send({
-        email: 'ptres@gmail.com',
-        password: '12345678'
+        email: 'user@mail.com',
+        password: '123456'
       });
 
     await api
@@ -65,8 +65,8 @@ describe('API route /api/testimonial - Request POST - Post Testimony', () => {
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'ptres@gmail.com',
-        password: '12345678'
+        email: 'user@mail.com',
+        password: '123456'
       });
     await api
       .post('/api/testimonials')
@@ -86,8 +86,8 @@ describe('API route /api/testimonial - Request POST - Post Testimony', () => {
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'puno@gmail.com',
-        password: '12345678'
+        email: 'admin@mail.com',
+        password: '123456'
       });
     await api
       .post('/api/testimonials')
@@ -107,8 +107,8 @@ describe('API route /api/testimonial - Request POST - Post Testimony', () => {
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'puno@gmail.com',
-        password: '12345678'
+        email: 'admin@mail.com',
+        password: '123456'
       });
     await api
       .post('/api/activities')
@@ -146,8 +146,8 @@ describe('API route /api/testimonial - Request PUT - Put Testimony', () => {
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'puno@gmail.com',
-        password: '12345678'
+        email: 'admin@mail.com',
+        password: '123456'
       });
     const testimony = await Testimony.create({
       name: 'jet set',
@@ -182,8 +182,8 @@ describe('API route /api/testimonial/:id - Request DELETE - Delete Testimony', (
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'ptres@gmail.com',
-        password: '12345678'
+        email: 'user@mail.com',
+        password: '123456'
       });
     await api
       .delete('/api/testimonials/1')
@@ -203,8 +203,8 @@ describe('API route /api/testimonial/:id - Request DELETE - Delete Testimony', (
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        email: 'puno@gmail.com',
-        password: '12345678'
+        email: 'admin@mail.com',
+        password: '123456'
       });
     await api
       .delete(`/api/testimonials/${testimony.dataValues.id}`)
