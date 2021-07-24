@@ -52,7 +52,7 @@ module.exports = {
 
       const operation = contact.destroy();
 
-      if(operation) return res.status(200).json("Entry successfully deleted");
+      if(operation) return res.status(204).json("Entry successfully deleted");
     } catch(err){
       res.status(500).json({ Error: err });
     }
