@@ -4,7 +4,7 @@ const router = express.Router();
 const upload = require('../middlewares/manageFiles');
 const {postImage, getImage, deleteImage} = require('../controllers/ImagesController');
 
-const verifyToken = require('../services/TokenService');
+const verifyToken = require('../middlewares/verifyToken');
 
 //METER VERIFY TOKEN ANTES DE SUBIR A BITBUCKET
 router.post('/', verifyToken, upload,  postImage);
