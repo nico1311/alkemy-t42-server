@@ -23,5 +23,18 @@ module.exports = {
       );
       res.status(500).json({ Error: error.message });
     }
+  },
+  async editPublicData(req, res) {
+    try {
+      const publicData = await PublicData.findByPk(1);
+      await publicData.update(req.body);
+      res.status(200).json(publicData);
+      log.info('Public Data Updated');
+    } catch (error) {
+      log.error(
+        `Error happened trying edit public data. Error: [${error.message}] `
+      );
+      res.status(304).json({ Error: error.message });
+    }
   }
 };
