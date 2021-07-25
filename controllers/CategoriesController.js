@@ -1,7 +1,6 @@
 const { Category } = require('../models');
-const { debug } = require('../utils/logger');
 const log = require('../utils/logger');
-const {Entry} = require('../models');
+const { Entry } = require('../models');
 
 module.exports = {
   /**
@@ -33,21 +32,12 @@ module.exports = {
    * @returns {Promise<void>}
    */
   async createCategory(req, res) {
-    const categorySchema = Joi.object({
-      name: Joi.string().min(2).required(),
-      description: Joi.string().min(10).max(2048).required()
-    });
     try {
-      const values = await categorySchema.validateAsync(req.body);
+      const values = req.body;
       const category = await Category.create(values);
       res.status(201).json(category);
     } catch (err) {
-      if (err.details) {
-        // body validation error
-        res.status(422).json({ errors: err.details });
-      } else {
-        res.status(500).json({ error: err.message });
-      }
+      res.status(500).json({ error: err.message });
     }
   },
   /**
@@ -93,9 +83,8 @@ module.exports = {
       }
 
       //If you wanna delete a category, you should delete all entries with that cateogories first yeah ;)
-      const entries = await Entry.findAll({where : {categoryId: id}});
-      entries.map(async (entry) => 
-      {
+      const entries = await Entry.findAll({ where: { categoryId: id } });
+      entries.map(async (entry) => {
         await entry.destroy();
       })
 
