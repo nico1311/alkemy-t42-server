@@ -25,6 +25,30 @@ module.exports = {
       log.error(`Error happened trying to getting categories. Error; [${err.message}]`)
     }
   },
+
+  /**
+   * Get all categories
+   * @param {import('express').Request} req
+   * @param {import('express').Response} res
+   * @returns {Promise<void>}
+   */
+   async getCategory(req, res) {
+    try {
+      const category = await Category.findOne({ where: { id: req.params.id } });
+      if (category) {
+        log.info('Sending one category');
+        res.status(200).json({ category: category });
+      } else {
+        log.error('Category Not Found.');
+        res.sendStatus(404);
+      }
+    } catch (err) {
+      log.error(
+        `Error happened trying to send the category. Error: [${err.message}]`
+      );
+      res.status(500).json({ error: err.message });
+    }
+  },
   /**
    * Create a new category
    * @param {import('express').Request} req
