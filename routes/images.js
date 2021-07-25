@@ -4,9 +4,11 @@ const router = express.Router();
 const upload = require('../middlewares/manageFiles');
 const {postImage, getImage, deleteImage} = require('../controllers/ImagesController');
 
+const verifyToken = require('../middlewares/verifyToken');
+
 //METER VERIFY TOKEN ANTES DE SUBIR A BITBUCKET
-router.post('/', upload,  postImage);
-router.get('/:id', getImage);
-router.delete('/:id', deleteImage);
+router.post('/', verifyToken, upload,  postImage);
+router.get('/:id', verifyToken, getImage);
+router.delete('/:id', verifyToken, deleteImage);
 
 module.exports = router;

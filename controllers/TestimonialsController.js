@@ -1,3 +1,4 @@
+const { response } = require('express');
 const { Testimony } = require('../models');
 const log = require('../utils/logger');
 
@@ -11,6 +12,21 @@ module.exports = {
     } catch (err) {
       log.error(`Error happened trying sending the users. Error: [${err.message}]`)
       res.status(500).json("Ha ocurrido un error. Por favor, inténtelo nuevamente.");
+    }
+  },
+
+  async getTestimony(req, res)
+  {
+    const id = req.params.id;
+    try {
+      const testimony = await Testimony.findByPk(id);
+
+      if(testimony) return res.status(200).json(testimony);
+
+      log.warn(`Entry with id [${id}] does not exist`);
+      return res.status(404).json({Error: "Entry not found"});
+    }catch {
+      return res.status(505).json("Ha ocurrido un error. Por favor, inténtelo nuevamente");
     }
   },
   /**
