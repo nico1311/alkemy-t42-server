@@ -37,7 +37,7 @@ module.exports = {
       const category = await Category.findOne({ where: { id: req.params.id } });
       if (category) {
         log.info('Sending one category');
-        res.status(200).json({ Category: category });
+        res.status(200).json({ category: category });
       } else {
         log.error('Category Not Found.');
         res.sendStatus(404);
@@ -46,7 +46,7 @@ module.exports = {
       log.error(
         `Error happened trying to send the category. Error: [${err.message}]`
       );
-      res.status(500).json({ Error: err.message });
+      res.status(500).json({ error: err.message });
     }
   },
   /**
