@@ -15,13 +15,13 @@ module.exports = {
           exclude: ['id', 'createdAt', 'updatedAt']
         }
       });
-      log.info('Seending Public Data');
+      log.info('Sending Public Data');
       res.status(200).json({ publicData: publicData });
     } catch (error) {
       log.error(
-        `Error happened trying to send all the activities. Error: [${error.message}]`
+        `Error happened trying to send public data. Error: [${error.message}]`
       );
-      res.status(500).json({ Error: error.message });
+      res.status(500).json({ error: error.message });
     }
   },
   async editPublicData(req, res) {
@@ -34,7 +34,7 @@ module.exports = {
       log.error(
         `Error happened trying edit public data. Error: [${error.message}] `
       );
-      res.status(304).json({ Error: error.message });
+      res.status(500).json({ error: error.message });
     }
   }
 };
