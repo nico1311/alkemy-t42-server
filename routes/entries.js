@@ -5,11 +5,10 @@ const checkAdmin = require('../middlewares/checkAdmin');
 const { getNews, getNewsDetail, putNew, deleteNew, postNew } = require('../controllers/EntriesController');
 const validateEntry = require('../validations/EntriesValidation');
 
-router.get('/', verifyToken, getNews);
-router.get('/:id', verifyToken, getNewsDetail);
+router.get('/', getNews);
+router.get('/:id', getNewsDetail);
 router.post('/', [verifyToken, checkAdmin, validateEntry], postNew);
 router.put('/:id', [verifyToken, checkAdmin, validateEntry], putNew);
 router.delete('/:id', [verifyToken, checkAdmin], deleteNew );
-
 
 module.exports = router;
