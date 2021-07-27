@@ -66,6 +66,10 @@ module.exports = {
           }
         });
 
+        if (req.user?.roleId === 1 && req.body.roleId) {
+          user.roleId = req.body.roleId;
+        }
+
         await user.save();
 
         const { password, ...sentValues } = user.dataValues; // exclude password
@@ -131,6 +135,10 @@ module.exports = {
           user[camelCaseKey] = value;
         }
       });
+
+      if (req.user?.roleId === 1 && req.body.roleId) {
+        user.roleId = req.body.roleId;
+      }
 
       await user.save();
 
