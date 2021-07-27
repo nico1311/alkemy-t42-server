@@ -27,6 +27,13 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date()
         },
+        {
+          name: 'Paseos recreativos',
+          image: 'https://lh3.googleusercontent.com/pw/AM-JKLVW5lFf6NtF2vpEZrMlwOtgth5YUAftKgIw1MMfhRY0cCWFWebQ5STZzJOdPPlTAesdcli6RbaBXlX2H6xkvL48460tXmp0CBn9Te-HaEnKkq9YKTM8DG3O3JlRO-iiXqRH1W9FKskZ4SOtf8KEX_Ipaw=w1040-h585-no?authuser=0',
+          content: 'Promover la participación',
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
       ],
       {}
     );
