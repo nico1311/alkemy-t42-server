@@ -22,6 +22,18 @@ module.exports = {
       res.status(500).json({ error: err.message });
     }
   },
+
+  async getUser(req, res) {
+    try{
+      const user = await User.findByPk(req.params.id, {attributes: { exclude: ['password']}});
+
+      log.info(`Sended user with id ${req.params.id}`);
+      res.status(200).json(user);
+    } catch(err) {
+      log.error(`Error happened trying to send the users. Error: [${err.message}]`);
+      res.status(500).json({ error: err.message });
+    }
+  },
   async deleteUser(req, res) {
     try {
       const response = await User.destroy({
