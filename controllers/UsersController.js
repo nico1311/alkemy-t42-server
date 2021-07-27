@@ -31,15 +31,18 @@ module.exports = {
    */
   async getUser (req, res) {
     try {
-      const user = await User.findByPk(req.params.id);
+      const user = await User.findByPk(req.params.id, {
+        attributes: { exclude: ['password'] }
+      });
 
       if (user) {
-        const { password, ...sentValues } = user.dataValues; // exclude password
-        res.status(200).json(sentValues);
+        res.status(200).json(user);
+        log.info(`Sent user with id ${req.params.id}`);
       } else {
         res.status(404).json({ error: 'User not found' })
       }
     } catch (err) {
+      log.error(`Error happened trying to send the users. Error: [${err.message}]`);
       res.status(500).json({ error: err.message });
     }
   },
